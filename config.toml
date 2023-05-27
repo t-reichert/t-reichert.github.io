@@ -1,0 +1,4 @@
+baseURL = 'http://example_page.org/'
+languageCode = 'en-us'
+title = 'About me'
+theme = 'ananke'

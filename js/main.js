@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const matchesType = type === "all" || itemType === type;
       item.style.display = matchesQuery && matchesType ? "" : "none";
     });
+
+    // Optional hook: publications.js uses this to fold/unfold year-group
+    // sections and hide empty ones once the list is grouped by year.
+    if (window.onPubFiltersApplied) window.onPubFiltersApplied(query, type);
   }
   window.applyPubFilters = applyPubFilters; // publications.js calls this after rendering
 

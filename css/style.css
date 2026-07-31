@@ -506,6 +506,85 @@ main { display: block; }
   .nucleus-r { transform: translateX(-255px); }
 }
 
+/* ---------------- Publications: per-year chart ---------------- */
+.pub-chart {
+  margin-bottom: 28px;
+  padding: 18px 18px 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+.pub-chart svg { width: 100%; height: auto; display: block; cursor: default; }
+.pub-chart-bar rect { cursor: pointer; transition: filter .15s ease; }
+.pub-chart-bar:hover rect { filter: brightness(1.18); }
+.pub-chart-bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform .7s cubic-bezier(.16,1,.3,1);
+}
+.pub-chart.loaded .pub-chart-bar { transform: scaleY(1); }
+.pub-chart-year {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--text-faint);
+}
+.pub-chart-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+
+/* ---------------- Publications: foldable year groups ---------------- */
+.pub-year-group { list-style: none; margin-bottom: 22px; }
+.pub-year-group.no-match { display: none; }
+.pub-year-toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 0 0 8px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text);
+}
+.pub-year-toggle .chevron {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  transition: transform .15s ease;
+  display: inline-block;
+}
+.pub-year-label {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.pub-year-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+.pub-year-items {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.pub-year-group.collapsed .pub-year-items { display: none; }
+.pub-year-group.collapsed .chevron { transform: rotate(-90deg); }
+.pub-year-group.force-open .pub-year-items { display: flex !important; }
+.pub-year-group.force-open .chevron { transform: rotate(0deg) !important; }
+
+/* ---------------- KaTeX color inheritance (titles/meta render on dark bg) ---------------- */
+.pub-title .katex, .pub-meta .katex { color: inherit; }
+.katex { font-size: 1em; }
+
 /* ---------------- Contact ---------------- */
 .contact-grid {
   display: grid;

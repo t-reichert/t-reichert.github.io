@@ -19,16 +19,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ---------- Publications: search + filter ----------
+  // NOTE: pub-items are rendered async from bibliography.bib (see publications.js),
+  // so this queries .pub-item live on every call rather than caching a NodeList once.
   const pubSearch = document.querySelector(".pub-search");
   const chips = document.querySelectorAll(".filter-chip");
-  const pubItems = document.querySelectorAll(".pub-item");
 
   function applyPubFilters() {
     const query = (pubSearch?.value || "").toLowerCase();
     const activeChip = document.querySelector(".filter-chip.active");
     const type = activeChip ? activeChip.dataset.type : "all";
 
-    pubItems.forEach(item => {
+    document.querySelectorAll(".pub-item").forEach(item => {
       const text = item.textContent.toLowerCase();
       const itemType = item.dataset.type;
       const matchesQuery = text.includes(query);
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       item.style.display = matchesQuery && matchesType ? "" : "none";
     });
   }
+  window.applyPubFilters = applyPubFilters; // publications.js calls this after rendering
 
   if (pubSearch) pubSearch.addEventListener("input", applyPubFilters);
   chips.forEach(chip => {
@@ -46,13 +48,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ---------- BibTeX toggles ----------
-  document.querySelectorAll(".bibtex-toggle").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const block = btn.closest(".pub-item").querySelector(".bibtex-block");
-      block.classList.toggle("open");
-      btn.textContent = block.classList.contains("open") ? "[ hide bibtex ]" : "[ bibtex ]";
-    });
+  // ---------- BibTeX toggles (event delegation, works for dynamically-added items) ----------
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".bibtex-toggle");
+    if (!btn) return;
+    const block = btn.closest(".pub-item").querySelector(".bibtex-block");
+    block.classList.toggle("open");
+    btn.textContent = block.classList.contains("open") ? "[ hide bibtex ]" : "[ bibtex ]";
   });
 
   // ---------- Gallery lightbox ----------

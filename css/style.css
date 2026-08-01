@@ -21,6 +21,9 @@
   --magenta: #e2496b;
   --gold: #f2a93b;
   --gradient: linear-gradient(90deg, var(--violet) 0%, var(--magenta) 55%, var(--gold) 100%);
+  --nucleus-l: #c9b8f0;
+  --nucleus-r: #f2c98a;
+  --nav-bg: rgba(18, 20, 28, 0.82);
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -115,7 +118,7 @@ p { margin: 0 0 1em; color: var(--text); }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(18, 20, 28, 0.82);
+  background: var(--nav-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-soft);
 }
@@ -584,6 +587,61 @@ main { display: block; }
 /* ---------------- KaTeX color inheritance (titles/meta render on dark bg) ---------------- */
 .pub-title .katex, .pub-meta .katex { color: inherit; }
 .katex { font-size: 1em; }
+
+[data-theme="light"] {
+  --bg: #f7f5f2;
+  --bg-alt: #f1eee8;
+  --surface: #ffffff;
+  --surface-2: #ece8e1;
+  --border: #ddd7cc;
+  --border-soft: #e8e3da;
+
+  --text: #201d2b;
+  --text-muted: #5b5768;
+  --text-faint: #8b8695;
+
+  --violet: #6440c0;
+  --magenta: #c2255c;
+  --gold: #b6790a;
+  --nucleus-l: #8a63d2;
+  --nucleus-r: #b6790a;
+  --nav-bg: rgba(247, 245, 242, 0.82);
+
+  --shadow-card: 0 1px 2px rgba(32,29,43,0.06), 0 8px 20px -12px rgba(32,29,43,0.14);
+}
+[data-theme="light"] body {
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(100,64,192,0.07), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(182,121,10,0.06), transparent 55%);
+}
+[data-theme="light"] ::selection { background: #c2255c; color: #fff; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  width: 42px;
+  height: 24px;
+  padding: 2px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.theme-toggle-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gradient);
+  transition: transform .2s ease;
+}
+[data-theme="light"] .theme-toggle-thumb { transform: translateX(18px); }
 
 /* ---------------- Contact ---------------- */
 .contact-grid {

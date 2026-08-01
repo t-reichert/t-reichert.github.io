@@ -453,12 +453,12 @@ function renderChart(entries, chartEl) {
     <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Publications per year">
       <defs>
         <linearGradient id="pubChartGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-          <stop offset="0%" stop-color="#8a63d2"/>
-          <stop offset="55%" stop-color="#e2496b"/>
-          <stop offset="100%" stop-color="#f2a93b"/>
+          <stop offset="0%" stop-color="var(--violet)"/>
+          <stop offset="55%" stop-color="var(--magenta)"/>
+          <stop offset="100%" stop-color="var(--gold)"/>
         </linearGradient>
       </defs>
-      <line x1="${padL}" y1="${baseY}" x2="${W - padR}" y2="${baseY}" stroke="#2b2f42" stroke-width="1"/>
+      <line x1="${padL}" y1="${baseY}" x2="${W - padR}" y2="${baseY}" stroke="var(--border)" stroke-width="1"/>
       ${bars}
     </svg>`;
 

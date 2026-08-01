@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>(function(){try{if(localStorage.getItem("site-theme")!=="dark"){document.documentElement.setAttribute("data-theme","light");}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dr. Tom Reichert — Heavy-Ion Physics</title>
 <meta name="description" content="Postdoctoral researcher working on the QCD phase diagram and heavy-ion collisions.">
@@ -13,23 +14,28 @@
 </head>
 <body>
 
-<nav class="site-nav">
-  <div class="inner">
-    <a href="index.html" class="brand"><span class="dot"></span>Tom Reichert</a>
-    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="publications.html">Publications</a></li>
-      <li><a href="talks.html">Talks</a></li>
-      <li><a href="conferences.html">Conferences</a></li>
-      <li><a href="teaching.html">Teaching</a></li>
-      <li><a href="outreach.html">Outreach</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="cv.html">CV</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </div>
-</nav>
+  <nav class="site-nav">
+    <div class="inner">
+      <a href="index.html" class="brand"><span class="dot"></span>Alex Rieger</a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="publications.html">Publications</a></li>
+          <li><a href="talks.html">Talks</a></li>
+          <li><a href="conferences.html">Conferences</a></li>
+          <li><a href="teaching.html">Teaching</a></li>
+          <li><a href="outreach.html">Outreach</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="cv.html">CV</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme" aria-pressed="false" title="Switch color theme">
+          <span class="theme-toggle-thumb"></span>
+        </button>
+        <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
 
 <main>
   <section class="container hero">
@@ -51,54 +57,54 @@
       <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="flashGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#f2a93b" stop-opacity="0.9"/>
-            <stop offset="55%" stop-color="#e2496b" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#e2496b" stop-opacity="0"/>
+            <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.9"/>
+            <stop offset="55%" stop-color="var(--magenta)" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="var(--magenta)" stop-opacity="0"/>
           </radialGradient>
         </defs>
 
-        <line x1="20" y1="150" x2="780" y2="150" stroke="#2b2f42" stroke-width="1"/>
+        <line x1="20" y1="150" x2="780" y2="150" stroke="var(--border)" stroke-width="1"/>
 
         <circle class="flash" cx="400" cy="150" r="2" fill="url(#flashGrad)"/>
 
-        <g class="spark" stroke="#f2a93b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round">
+        <g class="spark" stroke="var(--gold)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round">
           <line x1="400" y1="150" x2="510" y2="150"/>
         </g>
-        <g class="spark" stroke="#e2496b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.05s">
+        <g class="spark" stroke="var(--magenta)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.05s">
           <line x1="400" y1="150" x2="495" y2="205"/>
         </g>
-        <g class="spark" stroke="#8a63d2" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.1s">
+        <g class="spark" stroke="var(--violet)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.1s">
           <line x1="400" y1="150" x2="455" y2="245"/>
         </g>
-        <g class="spark" stroke="#f2a93b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.15s">
+        <g class="spark" stroke="var(--gold)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.15s">
           <line x1="400" y1="150" x2="400" y2="260"/>
         </g>
-        <g class="spark" stroke="#e2496b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.2s">
+        <g class="spark" stroke="var(--magenta)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.2s">
           <line x1="400" y1="150" x2="345" y2="245"/>
         </g>
-        <g class="spark" stroke="#8a63d2" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.08s">
+        <g class="spark" stroke="var(--violet)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.08s">
           <line x1="400" y1="150" x2="305" y2="205"/>
         </g>
-        <g class="spark" stroke="#f2a93b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.03s">
+        <g class="spark" stroke="var(--gold)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.03s">
           <line x1="400" y1="150" x2="290" y2="150"/>
         </g>
-        <g class="spark" stroke="#e2496b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.18s">
+        <g class="spark" stroke="var(--magenta)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.18s">
           <line x1="400" y1="150" x2="305" y2="95"/>
         </g>
-        <g class="spark" stroke="#8a63d2" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.12s">
+        <g class="spark" stroke="var(--violet)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.12s">
           <line x1="400" y1="150" x2="345" y2="55"/>
         </g>
-        <g class="spark" stroke="#f2a93b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.22s">
+        <g class="spark" stroke="var(--gold)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.22s">
           <line x1="400" y1="150" x2="400" y2="40"/>
         </g>
-        <g class="spark" stroke="#e2496b" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.07s">
+        <g class="spark" stroke="var(--magenta)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.07s">
           <line x1="400" y1="150" x2="455" y2="55"/>
         </g>
-        <g class="spark" stroke="#8a63d2" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.16s">
+        <g class="spark" stroke="var(--violet)" stroke-width="1.6" stroke-dasharray="60" stroke-linecap="round" style="animation-delay:.16s">
           <line x1="400" y1="150" x2="495" y2="95"/>
         </g>
 
-        <g class="nucleus-l" fill="#c9b8f0">
+        <g class="nucleus-l" fill="var(--nucleus-l)">
           <circle cx="145" cy="150" r="7"/>
           <circle cx="163" cy="150" r="7"/>
           <circle cx="127" cy="150" r="7"/>
@@ -107,7 +113,7 @@
           <circle cx="154" cy="134" r="7"/>
           <circle cx="136" cy="134" r="7"/>
         </g>
-        <g class="nucleus-r" fill="#f2c98a">
+        <g class="nucleus-r" fill="var(--nucleus-r)">
           <circle cx="655" cy="150" r="7"/>
           <circle cx="637" cy="150" r="7"/>
           <circle cx="673" cy="150" r="7"/>
@@ -160,19 +166,19 @@
       </div>
       <div class="card" aria-hidden="true">
         <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
-          <line x1="45" y1="20" x2="45" y2="260" stroke="#2b2f42"/>
-          <line x1="45" y1="260" x2="400" y2="260" stroke="#2b2f42"/>
-          <text x="10" y="30" fill="#6a708c" font-family="IBM Plex Mono" font-size="11">T</text>
-          <text x="380" y="278" fill="#6a708c" font-family="IBM Plex Mono" font-size="11">μ_B</text>
+          <line x1="45" y1="20" x2="45" y2="260" stroke="var(--border)"/>
+          <line x1="45" y1="260" x2="400" y2="260" stroke="var(--border)"/>
+          <text x="10" y="30" fill="var(--text-faint)" font-family="IBM Plex Mono" font-size="11">T</text>
+          <text x="380" y="278" fill="var(--text-faint)" font-family="IBM Plex Mono" font-size="11">μ_B</text>
 
-          <path d="M45,90 C160,95 230,150 290,220" fill="none" stroke="#8a63d2" stroke-width="2"/>
-          <path d="M290,220 C320,245 345,255 380,258" fill="none" stroke="#e2496b" stroke-width="2" stroke-dasharray="4 5"/>
+          <path d="M45,90 C160,95 230,150 290,220" fill="none" stroke="var(--violet)" stroke-width="2"/>
+          <path d="M290,220 C320,245 345,255 380,258" fill="none" stroke="var(--magenta)" stroke-width="2" stroke-dasharray="4 5"/>
 
-          <circle cx="290" cy="220" r="5" fill="#f2a93b"/>
-          <text x="300" y="215" fill="#f2a93b" font-family="IBM Plex Mono" font-size="10">critical point?</text>
+          <circle cx="290" cy="220" r="5" fill="var(--gold)"/>
+          <text x="300" y="215" fill="var(--gold)" font-family="IBM Plex Mono" font-size="10">critical point?</text>
 
-          <text x="70" y="60" fill="#9aa0ba" font-family="IBM Plex Mono" font-size="10">quark-gluon plasma</text>
-          <text x="180" y="245" fill="#9aa0ba" font-family="IBM Plex Mono" font-size="10">hadronic matter</text>
+          <text x="70" y="60" fill="var(--text-muted)" font-family="IBM Plex Mono" font-size="10">quark-gluon plasma</text>
+          <text x="180" y="245" fill="var(--text-muted)" font-family="IBM Plex Mono" font-size="10">hadronic matter</text>
         </svg>
       </div>
     </div>

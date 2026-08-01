@@ -9,6 +9,23 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  // ---------- Theme toggle (dark <-> Paper & Ink light) ----------
+  const themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    const getTheme = () => (document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
+    const setTheme = (t) => {
+      if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+      else document.documentElement.removeAttribute("data-theme");
+      themeToggle.setAttribute("aria-pressed", t === "light" ? "true" : "false");
+    };
+    setTheme(getTheme());
+    themeToggle.addEventListener("click", () => {
+      const next = getTheme() === "light" ? "dark" : "light";
+      try { localStorage.setItem("site-theme", next); } catch (e) {}
+      setTheme(next);
+    });
+  }
+
   // Highlight current page in nav
   const here = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".nav-links a").forEach(a => {

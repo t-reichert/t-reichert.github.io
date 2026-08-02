@@ -9,11 +9,11 @@
 const MY_NAME_MATCHES = ["Rieger"];
 
 const TAG_MAP = {
-  journal:     { label: "Journal",     cls: "tag-gold" },
+  journal:     { label: "Journal",     cls: "tag-magenta" },
   proceedings: { label: "Proceedings", cls: "tag-magenta" },
   preprint:    { label: "Preprint",    cls: "tag-violet" },
   thesis:      { label: "Thesis",      cls: "tag-gold" },
-  other:       { label: "Other",       cls: "tag-violet" },
+  other:       { label: "Other",       cls: "tag-gold" },
 };
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -6,14 +6,14 @@
 
 // Your surname(s) as they appear in the .bib file's author fields — any author
 // entry containing one of these (case-insensitive) is bolded in the byline.
-const MY_NAME_MATCHES = ["Reichert"];
+const MY_NAME_MATCHES = ["Reichert", "Reichert, T.", "Reichert, Tom", "T. Reichert", "Tom Reichert"];
 
 const TAG_MAP = {
   journal:     { label: "Journal",     cls: "tag-magenta" },
   proceedings: { label: "Proceedings", cls: "tag-magenta" },
   preprint:    { label: "Preprint",    cls: "tag-violet" },
   thesis:      { label: "Thesis",      cls: "tag-gold" },
-  other:       { label: "Other",       cls: "tag-gold" },
+  other:       { label: "Thesis",       cls: "tag-gold" },
 };
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -6,7 +6,7 @@
 
 // Your surname(s) as they appear in the .bib file's author fields — any author
 // entry containing one of these (case-insensitive) is bolded in the byline.
-const MY_NAME_MATCHES = ["Rieger"];
+const MY_NAME_MATCHES = ["Reichert"];
 
 const TAG_MAP = {
   journal:     { label: "Journal",     cls: "tag-magenta" },
@@ -230,7 +230,7 @@ function categorize(entry) {
     return "journal";
   }
   if (["inproceedings", "proceedings", "conference"].includes(t)) return "proceedings";
-  if (["phdthesis", "mastersthesis"].includes(t)) return "thesis";
+  if (["phdthesis", "mastersthesis", "thesis"].includes(t)) return "thesis";
   if (["misc", "unpublished"].includes(t)) return "preprint";
   return "other";
 }

@@ -164,7 +164,7 @@ function categorize(entry) {
     return "journal";
   }
   if (["inproceedings", "proceedings", "conference"].includes(t)) return "proceedings";
-  if (["phdthesis", "mastersthesis"].includes(t)) return "thesis";
+  if (["phdthesis", "mastersthesis", "thesis"].includes(t)) return "thesis";
   if (["misc", "unpublished"].includes(t)) return "preprint";
   return "other";
 }

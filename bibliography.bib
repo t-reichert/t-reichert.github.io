@@ -24,6 +24,22 @@
 % Author formatting: "Last, First" is converted to "First Last" for display.
 % Your own name is bolded automatically — configured in js/publications.js
 % via the MY_NAME_MATCHES array (currently set to match "Rieger").
+% ========================================
+%   abstract                           — shown behind its own [ abstract ] button, kept out
+%                                        of the [ bibtex ] citation text (readers citing you
+%                                        don't need it there). Math in the abstract ($...$)
+%                                        is typeset with KaTeX just like in titles.
+%   citecount_manual                   — non-standard, optional: a hand-entered total citation
+%                                        count for papers scripts/fetch_citations.py can't look
+%                                        up any other way (not on INSPIRE, no DOI). See that
+%                                        script's docstring for details.
+%
+% Citations: run `python3 scripts/fetch_citations.py` whenever you want to refresh
+% citation numbers shown on the Publications page (total count + per-year chart).
+% It writes citations.json, which should be committed so the live site can read it
+% (it's a static site, nothing fetches INSPIRE/Crossref at visit-time). Entries are
+% resolved via eprint (INSPIRE) first, then doi (Crossref, total only, no per-year
+% breakdown), then citecount_manual.
 % ==========================================================================
 
 @article{Reichert:2026ztj,
@@ -150,7 +166,7 @@
 
 @article{Steinheimer:2025mho,
     author = "Steinheimer, Jan and Reichert, Tom and Bleicher, Marcus",
-    title = "{Determination of the {\ensuremath{\phi}}-meson production process and its absorption cross section via directed flow}",
+    title = "{Determination of the $\phi$-meson production process and its absorption cross section via directed flow}",
     eprint = "2507.19289",
     archivePrefix = "arXiv",
     primaryClass = "hep-ph",
@@ -500,7 +516,7 @@
 
 @article{Reichert:2022uha,
     author = "Reichert, Tom and Bleicher, Marcus",
-    title = "{Kinetic mass shifts of {\ensuremath{\rho}}(770) and K{\textasteriskcentered}(892) in Au+Au reactions at Ebeam = 1.23 AGeV}",
+    title = "{Kinetic mass shifts of $\rho$(770) and K*(892) in Au+Au reactions at Ebeam = 1.23 AGeV}",
     eprint = "2206.00410",
     archivePrefix = "arXiv",
     primaryClass = "nucl-th",

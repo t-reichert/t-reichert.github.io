@@ -4,22 +4,22 @@
 // Edit bibliography.bib and push — the list updates automatically.
 // ==========================================================================
 
-// Your surname(s) as they appear in the .bib file's author fields — any author
-// entry containing one of these (case-insensitive) is bolded in the byline.
-const MY_NAME_MATCHES = ["Reichert", "Reichert, T.", "Reichert, Tom", "T. Reichert", "Tom Reichert"];
+const MY_NAME_MATCHES = ["Rieger"];
 
 const TAG_MAP = {
-  journal:     { label: "Journal",     cls: "tag-magenta" },
+  journal:     { label: "Journal",     cls: "tag-gold" },
   proceedings: { label: "Proceedings", cls: "tag-magenta" },
   preprint:    { label: "Preprint",    cls: "tag-violet" },
   thesis:      { label: "Thesis",      cls: "tag-gold" },
-  other:       { label: "Thesis",       cls: "tag-gold" },
+  other:       { label: "Other",       cls: "tag-violet" },
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   const listEl = document.getElementById("pub-list");
   if (!listEl) return; // not on the publications page
   const chartEl = document.getElementById("pub-chart");
+
+  loadCitations(); // independent of bibliography.bib; fails quietly if citations.json doesn't exist yet
 
   fetch("bibliography.bib")
     .then(res => {
@@ -32,15 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
         listEl.innerHTML = emptyState("No entries found in bibliography.bib yet.");
         return;
       }
-      // Sort newest -> oldest by the entry's own `year` field (matches what's
-      // printed in each entry's meta line).
       entries.sort((a, b) => (parseInt(b.fields.year) || 0) - (parseInt(a.fields.year) || 0));
 
       renderChart(entries, chartEl);
       renderGroupedList(entries, listEl);
       wireYearToggles();
 
-      // KaTeX: render any $...$ math found inside the list (titles etc.)
       if (window.renderMathInElement) {
         window.renderMathInElement(listEl, {
           delimiters: [
@@ -67,9 +64,6 @@ function emptyState(msg) {
 }
 
 // -------------------- BibTeX parsing --------------------
-// A compact, tolerant parser: handles @type{key, field = {value}, field = "value",
-// field = 123, ...}, with brace-balanced values (so nested {Protected} words in
-// titles are handled) and comment lines between entries.
 
 function parseBibtex(text) {
   const entries = [];
@@ -114,7 +108,7 @@ function parseEntryBody(body) {
     while (i < rest.length && rest[i] !== "=") i++;
     if (i >= rest.length) break;
     const fieldKey = rest.slice(fkStart, i).trim().toLowerCase();
-    i++; // skip '='
+    i++;
     while (i < rest.length && /\s/.test(rest[i])) i++;
     let value = "";
     if (rest[i] === "{") {
@@ -144,10 +138,6 @@ function parseEntryBody(body) {
 }
 
 // -------------------- LaTeX -> plain text / math --------------------
-// Handles two independent things BibTeX exports often contain:
-//   1. Accent macros for names/titles, e.g. Bergstr{\"o}m, {\'e}cole, Schr{\"o}dinger
-//   2. Inline math, e.g. $\sqrt{s_{NN}} = 200$ GeV — this is left untouched and
-//      handed to KaTeX for real typesetting rather than being decoded as text.
 
 const ACCENT_MAP = {
   '"a':'ä','"o':'ö','"u':'ü','"A':'Ä','"O':'Ö','"U':'Ü',
@@ -166,18 +156,14 @@ const LONE_MACRO_MAP = {
 
 function decodeLatexAccents(s) {
   if (!s) return s;
-  // \"a, \'e, \`a, \^o, \~n  (with or without braces: \"{a} / \"a)
   s = s.replace(/\\(["'`^~])\{?([a-zA-Z])\}?/g, (m, acc, ch) => ACCENT_MAP[acc + ch] || ch);
-  // \c{c} cedilla, \v{s} caron — these need the braces to disambiguate
   s = s.replace(/\\c\{([a-zA-Z])\}/g, (m, c) => CEDILLA_MAP[c] || c);
   s = s.replace(/\\v\{([a-zA-Z])\}/g, (m, c) => CARON_MAP[c] || c);
-  // lone macros: \aa \AA \ss \ae \AE \oe \OE \o \O \l \L \i \j (not followed by a letter)
   s = s.replace(/\\(aa|AA|ss|ae|AE|oe|OE|o|O|l|L|i|j)(?![a-zA-Z])\{?\}?/g, (m, cmd) => LONE_MACRO_MAP[cmd] || m);
-  // dashes, smart quotes, escaped specials
   s = s.replace(/---/g, "—").replace(/--/g, "–");
   s = s.replace(/``/g, "\u201C").replace(/''/g, "\u201D");
   s = s.replace(/\\&/g, "&").replace(/\\%/g, "%").replace(/\\_/g, "_").replace(/\\#/g, "#");
-  s = s.replace(/~/g, " "); // non-breaking space in LaTeX source -> normal space
+  s = s.replace(/~/g, " ");
   return s;
 }
 
@@ -185,8 +171,6 @@ function stripBraces(s) {
   return (s || "").replace(/[{}]/g, "");
 }
 
-// Pulls out $...$ / $$...$$ math spans so accent-decoding and brace-stripping
-// don't mangle LaTeX math syntax (which relies on braces, e.g. s_{NN}).
 function protectMath(s) {
   const maths = [];
   const placeholder = (s || "").replace(/\$\$[^$]*\$\$|\$[^$]*\$/g, (match) => {
@@ -199,8 +183,6 @@ function restoreMath(s, maths) {
   return s.replace(/\u0000MATH(\d+)\u0000/g, (m, i) => maths[+i]);
 }
 
-// Full pipeline for a display field: protect math -> decode accents -> strip
-// leftover protective braces -> restore math untouched.
 function latexField(raw) {
   if (!raw) return "";
   const { placeholder, maths } = protectMath(raw);
@@ -209,7 +191,6 @@ function latexField(raw) {
   return restoreMath(stripped, maths);
 }
 
-// Author names don't contain math; just decode accents + strip braces.
 function latexPlain(raw) {
   return stripBraces(decodeLatexAccents(raw || ""));
 }
@@ -230,25 +211,21 @@ function categorize(entry) {
     return "journal";
   }
   if (["inproceedings", "proceedings", "conference"].includes(t)) return "proceedings";
-  if (["phdthesis", "mastersthesis", "thesis"].includes(t)) return "thesis";
+  if (["phdthesis", "mastersthesis"].includes(t)) return "thesis";
   if (["misc", "unpublished"].includes(t)) return "preprint";
   return "other";
 }
 
-// The year shown in each entry's own meta line — used to group/sort the list.
 function headingYear(entry) {
   return parseInt(entry.fields.year, 10) || null;
 }
 
-// arXiv IDs encode YYMM (e.g. 2607.xxxxx -> posted 2026-07). The chart uses
-// this "went public" year when available, since that's usually more useful
-// for a career timeline than the (often later) journal publication year.
 function chartYear(entry) {
   const eprint = entry.fields.eprint || "";
   const m = eprint.match(/^(\d{2})(\d{2})/);
   if (m) {
     const yy = parseInt(m[1], 10);
-    return 2000 + yy; // all modern arXiv IDs (post-2007) are 20xx
+    return 2000 + yy;
   }
   return headingYear(entry);
 }
@@ -319,8 +296,6 @@ function buildLinks(entry) {
   return links;
 }
 
-// Rebuilds a clean BibTeX block for display, leaving out fields people don't
-// need for citing you (currently just `abstract` — it has its own button).
 function buildBibtexText(entry, excludeFields = []) {
   const keys = Object.keys(entry.fields).filter(k => !excludeFields.includes(k));
   const width = keys.reduce((max, k) => Math.max(max, k.length), 0);
@@ -331,9 +306,6 @@ function buildBibtexText(entry, excludeFields = []) {
 function renderEntry(entry) {
   const cat = categorize(entry);
   const tag = TAG_MAP[cat] || TAG_MAP.other;
-  // NOTE: title/abstract are left with $...$ math spans intact (escaped for
-  // HTML safety, but not stripped) — KaTeX's auto-render finds and typesets
-  // them after this HTML is inserted into the page.
   const title = escapeHtml(latexField(entry.fields.title || "Untitled"));
   const meta = buildMeta(entry);
   const authorsHtml = buildAuthorsHtml(entry);
@@ -347,8 +319,6 @@ function renderEntry(entry) {
   const abstractBtn = hasAbstract ? `<button class="abstract-toggle" type="button">[ abstract ]</button>` : "";
   const abstractBlock = hasAbstract ? `<div class="abstract-block"><p>${abstractHtml}</p></div>` : "";
 
-  // People citing you don't need the abstract text in the BibTeX block —
-  // it has its own toggle instead.
   const bibtexText = buildBibtexText(entry, ["abstract"]);
 
   return `
@@ -372,7 +342,7 @@ function renderEntry(entry) {
 // -------------------- Grouped, foldable year sections --------------------
 
 function renderGroupedList(entries, listEl) {
-  const groups = new Map(); // year (number|"Undated") -> entries[]
+  const groups = new Map();
   entries.forEach(e => {
     const y = headingYear(e) || "Undated";
     if (!groups.has(y)) groups.set(y, []);
@@ -409,9 +379,6 @@ function wireYearToggles() {
     });
   });
 
-  // Search/filter hook (called from main.js's applyPubFilters): hide groups
-  // with zero visible entries, and force-expand groups during an active
-  // search/filter so matches inside a collapsed year are still visible.
   window.onPubFiltersApplied = (query, type) => {
     const searching = Boolean(query) || (type && type !== "all");
     document.querySelectorAll(".pub-year-group").forEach(group => {
@@ -423,18 +390,13 @@ function wireYearToggles() {
   };
 }
 
-// -------------------- Publications-per-year bar chart --------------------
+// -------------------- Generic per-year bar chart --------------------
+// Shared by the "publications per year" and "citations per year" charts.
 
-function renderChart(entries, chartEl) {
+function renderBarChart(counts, chartEl, { ariaLabel, onBarClick, unitLabel = "" } = {}) {
   if (!chartEl) return;
-
-  const counts = new Map();
-  entries.forEach(e => {
-    const y = chartYear(e);
-    if (!y) return;
-    counts.set(y, (counts.get(y) || 0) + 1);
-  });
-  if (counts.size === 0) { chartEl.style.display = "none"; return; }
+  if (!counts || counts.size === 0) { chartEl.style.display = "none"; return; }
+  chartEl.style.display = "";
 
   const years = [...counts.keys()];
   const minYear = Math.min(...years);
@@ -452,6 +414,8 @@ function renderChart(entries, chartEl) {
   const barW = Math.max(10, (chartW - gap * (n - 1)) / n);
   const baseY = padT + chartH;
 
+  const gradId = `grad_${Math.random().toString(36).slice(2, 9)}`;
+
   const bars = allYears.map((year, i) => {
     const count = counts.get(year) || 0;
     const h = count === 0 ? 0 : Math.max(4, (count / maxCount) * chartH);
@@ -461,18 +425,18 @@ function renderChart(entries, chartEl) {
     const label = count === 0 ? "" :
       `<text x="${cx}" y="${y - 6}" text-anchor="middle" class="pub-chart-count">${count}</text>`;
     return `
-      <g class="pub-chart-bar" style="transform-origin: ${cx}px ${baseY}px; transition-delay:${i * 28}ms;">
-        <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="url(#pubChartGrad)"></rect>
+      <g class="pub-chart-bar" data-year="${year}" style="transform-origin: ${cx}px ${baseY}px; transition-delay:${i * 28}ms;">
+        <rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="url(#${gradId})"></rect>
         ${label}
-        <title>${year}: ${count} publication${count === 1 ? "" : "s"}</title>
+        <title>${year}: ${count} ${unitLabel}${count === 1 ? "" : (unitLabel ? "s" : "")}</title>
       </g>
       <text x="${cx}" y="${baseY + 18}" text-anchor="middle" class="pub-chart-year">${String(year).slice(2)}</text>`;
   }).join("");
 
   chartEl.innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Publications per year">
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${ariaLabel || "Chart"}">
       <defs>
-        <linearGradient id="pubChartGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+        <linearGradient id="${gradId}" x1="0%" y1="100%" x2="0%" y2="0%">
           <stop offset="0%" stop-color="var(--violet)"/>
           <stop offset="55%" stop-color="var(--magenta)"/>
           <stop offset="100%" stop-color="var(--gold)"/>
@@ -482,17 +446,64 @@ function renderChart(entries, chartEl) {
       ${bars}
     </svg>`;
 
-  // Trigger the grow-in transition on the next frame.
   requestAnimationFrame(() => requestAnimationFrame(() => chartEl.classList.add("loaded")));
 
-  // Clicking a bar jumps to (and expands) that year's section in the list below.
-  chartEl.querySelectorAll(".pub-chart-bar").forEach((bar, i) => {
-    bar.addEventListener("click", () => {
-      const year = allYears[i];
+  if (onBarClick) {
+    chartEl.querySelectorAll(".pub-chart-bar").forEach(bar => {
+      bar.addEventListener("click", () => onBarClick(bar.dataset.year));
+    });
+  }
+}
+
+function renderChart(entries, chartEl) {
+  const counts = new Map();
+  entries.forEach(e => {
+    const y = chartYear(e);
+    if (!y) return;
+    counts.set(y, (counts.get(y) || 0) + 1);
+  });
+  renderBarChart(counts, chartEl, {
+    ariaLabel: "Publications per year",
+    unitLabel: "publication",
+    onBarClick: (year) => {
       const group = document.querySelector(`.pub-year-group[data-year="${year}"]`);
       if (!group) return;
       group.classList.remove("collapsed");
       group.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
+    },
   });
+}
+
+// -------------------- Citations (from citations.json, see scripts/fetch_citations.py) --------------------
+
+function loadCitations() {
+  const chartEl = document.getElementById("citation-chart");
+  const labelEl = document.getElementById("citation-chart-label");
+  const statEl = document.getElementById("citation-stat");
+  if (!chartEl && !statEl) return;
+
+  fetch("citations.json")
+    .then(res => {
+      if (!res.ok) throw new Error(`citations.json returned ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      if (statEl) {
+        const total = data.total_citations ?? 0;
+        const exclSelf = data.total_citations_excl_self_citations;
+        statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}` +
+          (exclSelf != null && exclSelf !== total ? ` <span class="muted">(${exclSelf} excl. self-citations)</span>` : "");
+        statEl.style.display = "";
+      }
+      if (chartEl && data.citations_by_year && Object.keys(data.citations_by_year).length) {
+        const counts = new Map(Object.entries(data.citations_by_year).map(([y, c]) => [parseInt(y, 10), c]));
+        if (labelEl) labelEl.style.display = "";
+        renderBarChart(counts, chartEl, { ariaLabel: "Citations per year", unitLabel: "citation" });
+      }
+    })
+    .catch(() => {
+      if (chartEl) chartEl.style.display = "none";
+      if (labelEl) labelEl.style.display = "none";
+      if (statEl) statEl.style.display = "none";
+    });
 }

@@ -1,0 +1,392 @@
+{
+  "generated_at": "2026-08-13T15:08:21+00:00",
+  "total_citations": 524,
+  "total_citations_excl_self_citations": 292,
+  "citations_by_year": {
+    "2026": 94,
+    "2025": 128,
+    "2024": 74,
+    "2023": 54,
+    "2022": 79,
+    "2015": 1,
+    "2021": 20,
+    "2020": 19,
+    "2019": 4
+  },
+  "papers": [
+    {
+      "key": "Reichert:2026ztj",
+      "source": "inspire",
+      "recid": 3164611,
+      "citation_count": 1,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Reichert:2026dsb",
+      "source": "inspire",
+      "recid": 3125288,
+      "citation_count": 0,
+      "citation_count_excl_self": 0
+    },
+    {
+      "key": "Chimruang:2026jqe",
+      "source": "inspire",
+      "recid": 3123910,
+      "citation_count": 1,
+      "citation_count_excl_self": 0
+    },
+    {
+      "key": "Botvina:2026dpx",
+      "source": "crossref",
+      "citation_count": 0
+    },
+    {
+      "key": "OmanaKuttan:2026mcu",
+      "source": "crossref",
+      "citation_count": 0
+    },
+    {
+      "key": "Messchendorp:2025men",
+      "source": "inspire",
+      "recid": 3093887,
+      "citation_count": 18,
+      "citation_count_excl_self": 9
+    },
+    {
+      "key": "Agarwal:2025ezo",
+      "source": "inspire",
+      "recid": 3086281,
+      "citation_count": 5,
+      "citation_count_excl_self": 3
+    },
+    {
+      "key": "Hofmann:2025vaf",
+      "source": "inspire",
+      "recid": 3076073,
+      "citation_count": 0,
+      "citation_count_excl_self": 0
+    },
+    {
+      "key": "Steinheimer:2025trr",
+      "source": "inspire",
+      "recid": 3073749,
+      "citation_count": 4,
+      "citation_count_excl_self": 2
+    },
+    {
+      "key": "Chabane:2025eir",
+      "source": "inspire",
+      "recid": 2968019,
+      "citation_count": 1,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Steinheimer:2025mho",
+      "source": "inspire",
+      "recid": 2954442,
+      "citation_count": 5,
+      "citation_count_excl_self": 4
+    },
+    {
+      "key": "Reichert:2025egt",
+      "source": "inspire",
+      "recid": 2929305,
+      "citation_count": 5,
+      "citation_count_excl_self": 3
+    },
+    {
+      "key": "Reichert:2025rnw",
+      "source": "inspire",
+      "recid": 2915252,
+      "citation_count": 5,
+      "citation_count_excl_self": 4
+    },
+    {
+      "key": "Reichert:2025znn",
+      "source": "inspire",
+      "recid": 2899794,
+      "citation_count": 7,
+      "citation_count_excl_self": 5
+    },
+    {
+      "key": "Reichert:2025iwz",
+      "source": "inspire",
+      "recid": 2896598,
+      "citation_count": 5,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Steinheimer:2025hsr",
+      "source": "inspire",
+      "recid": 2871497,
+      "citation_count": 21,
+      "citation_count_excl_self": 12
+    },
+    {
+      "key": "Neidig:2025xgr",
+      "source": "inspire",
+      "recid": 2865805,
+      "citation_count": 5,
+      "citation_count_excl_self": 2
+    },
+    {
+      "key": "Reichert:2024ayg",
+      "source": "inspire",
+      "recid": 2850184,
+      "citation_count": 13,
+      "citation_count_excl_self": 8
+    },
+    {
+      "key": "Bumnedpan:2024jit",
+      "source": "inspire",
+      "recid": 2847979,
+      "citation_count": 2,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Buyukcizmeci:2024gpb",
+      "source": "inspire",
+      "recid": 2842089,
+      "citation_count": 6,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Steinheimer:2024eha",
+      "source": "inspire",
+      "recid": 2836642,
+      "citation_count": 26,
+      "citation_count_excl_self": 14
+    },
+    {
+      "key": "Ergun:2024jwi",
+      "source": "inspire",
+      "recid": 2833252,
+      "citation_count": 1,
+      "citation_count_excl_self": 0
+    },
+    {
+      "key": "Chabane:2024crn",
+      "source": "inspire",
+      "recid": 2828349,
+      "citation_count": 6,
+      "citation_count_excl_self": 3
+    },
+    {
+      "key": "Reichert:2024qdy",
+      "source": "inspire",
+      "recid": 2786529,
+      "citation_count": 0,
+      "citation_count_excl_self": 0
+    },
+    {
+      "key": "Reichert:2024stb",
+      "source": "inspire",
+      "recid": 2769916,
+      "citation_count": 3,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Buyukcizmeci:2023azb",
+      "source": "inspire",
+      "recid": 2672888,
+      "citation_count": 18,
+      "citation_count_excl_self": 7
+    },
+    {
+      "key": "Kittiratpattana:2023atz",
+      "source": "inspire",
+      "recid": 2778548,
+      "citation_count": 5,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Reichert:2023eev",
+      "source": "inspire",
+      "recid": 2636742,
+      "citation_count": 19,
+      "citation_count_excl_self": 9
+    },
+    {
+      "key": "Reichert:2023tww",
+      "source": "crossref",
+      "citation_count": 2
+    },
+    {
+      "key": "Reichert:2022mek",
+      "source": "inspire",
+      "recid": 2168904,
+      "citation_count": 32,
+      "citation_count_excl_self": 23
+    },
+    {
+      "key": "Kittiratpattana:2022ety",
+      "source": "inspire",
+      "recid": 2654631,
+      "citation_count": 1,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Li:2022iil",
+      "source": "inspire",
+      "recid": 2147024,
+      "citation_count": 45,
+      "citation_count_excl_self": 26
+    },
+    {
+      "key": "Reichert:2022ate",
+      "source": "crossref",
+      "citation_count": 0
+    },
+    {
+      "key": "Reichert:2022qys",
+      "source": "inspire",
+      "recid": 2626326,
+      "citation_count": 3,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Reichert:2022yxq",
+      "source": "inspire",
+      "recid": 2106450,
+      "citation_count": 6,
+      "citation_count_excl_self": 3
+    },
+    {
+      "key": "Kittiratpattana:2022knq",
+      "source": "inspire",
+      "recid": 2091459,
+      "citation_count": 10,
+      "citation_count_excl_self": 7
+    },
+    {
+      "key": "Reichert:2022uha",
+      "source": "inspire",
+      "recid": 2090163,
+      "citation_count": 11,
+      "citation_count_excl_self": 8
+    },
+    {
+      "key": "Herold:2022laa",
+      "source": "inspire",
+      "recid": 2061348,
+      "citation_count": 3,
+      "citation_count_excl_self": 1
+    },
+    {
+      "key": "Reichert:2022gqe",
+      "source": "inspire",
+      "recid": 2059440,
+      "citation_count": 11,
+      "citation_count_excl_self": 6
+    },
+    {
+      "key": "Reichert:2022qvt",
+      "source": "crossref",
+      "citation_count": 2
+    },
+    {
+      "key": "Reichert:2021ljd",
+      "source": "inspire",
+      "recid": 1968679,
+      "citation_count": 20,
+      "citation_count_excl_self": 8
+    },
+    {
+      "key": "Vormann:2021fat",
+      "source": "inspire",
+      "recid": 1937302,
+      "citation_count": 0,
+      "citation_count_excl_self": 0
+    },
+    {
+      "key": "Inghirami:2021zja",
+      "source": "inspire",
+      "recid": 1867477,
+      "citation_count": 5,
+      "citation_count_excl_self": 2
+    },
+    {
+      "key": "Hillmann:2020wzq",
+      "source": "crossref",
+      "citation_count": 2
+    },
+    {
+      "key": "Reichert:2020oes",
+      "source": "inspire",
+      "recid": 1828948,
+      "citation_count": 19,
+      "citation_count_excl_self": 10
+    },
+    {
+      "key": "Reichert:2020yhx",
+      "source": "inspire",
+      "recid": 1806549,
+      "citation_count": 20,
+      "citation_count_excl_self": 5
+    },
+    {
+      "key": "Gaebel:2020wid",
+      "source": "inspire",
+      "recid": 1802511,
+      "citation_count": 17,
+      "citation_count_excl_self": 6
+    },
+    {
+      "key": "Reichert:2020uxs",
+      "source": "inspire",
+      "recid": 1792120,
+      "citation_count": 14,
+      "citation_count_excl_self": 4
+    },
+    {
+      "key": "Bleicher:2019oog",
+      "source": "crossref",
+      "citation_count": 4
+    },
+    {
+      "key": "Hillmann:2019cfr",
+      "source": "crossref",
+      "citation_count": 3
+    },
+    {
+      "key": "Reichert:2019zab",
+      "source": "crossref",
+      "citation_count": 3
+    },
+    {
+      "key": "Hillmann:2019wlt",
+      "source": "inspire",
+      "recid": 1743167,
+      "citation_count": 54,
+      "citation_count_excl_self": 30
+    },
+    {
+      "key": "Reichert:2019lny",
+      "source": "inspire",
+      "recid": 1727184,
+      "citation_count": 20,
+      "citation_count_excl_self": 8
+    },
+    {
+      "key": "REICHERT2021117526",
+      "source": "crossref",
+      "citation_count": 35
+    },
+    {
+      "key": "Reichert:PhD",
+      "source": null,
+      "error": "no citation source available"
+    },
+    {
+      "key": "Reichert:MSc",
+      "source": null,
+      "error": "no citation source available"
+    },
+    {
+      "key": "Reichert:BSc",
+      "source": null,
+      "error": "no citation source available"
+    }
+  ],
+  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph). Papers resolved via Crossref or citecount_manual contribute to total_citations but not to the per-year breakdown, since neither source exposes a citing-paper list."
+}

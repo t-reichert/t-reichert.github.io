@@ -42,13 +42,18 @@
   <div class="container page-header">
     <p class="eyebrow">Publications</p>
     <h1>Publications</h1>
-    <p class="muted">Journal articles, conference proceedings, and preprints. Search or filter by type,
-      fold a year's section closed, or click a bar in the chart to jump to that year.
-      Click <span class="mono">[ bibtex ]</span> on any entry to see the citation.</p>
+    <p class="muted">Journal articles, conference proceedings, and preprints. 
+      Click <span class="mono">[ abstract ]</span> to read the article's abstract.
+      Click <span class="mono">[ bibtex ]</span> to see and download the bibtex citation.
+    </p>
   </div>
 
   <section class="section container" style="border-bottom:none;">
     <div class="pub-chart" id="pub-chart" aria-label="Publications per year"></div>
+
+    <p class="citation-stat" id="citation-stat" style="display:none;"></p>
+    <p class="mono small muted" id="citation-chart-label" style="display:none; margin:-6px 0 8px;">Citations per year</p>
+    <div class="pub-chart" id="citation-chart" aria-label="Citations per year" style="display:none;"></div>
 
     <div class="pub-controls">
       <input class="pub-search" type="text" placeholder="Search by title, author, or keyword…">
@@ -58,7 +63,7 @@
       <button class="filter-chip" data-type="thesis">Thesis</button>
     </div>
 
-    <p class="muted small mono" id="pub-source-note">Loaded from <a href="bibliography.bib" style="text-decoration:underline;">bibliography.bib</a></p>
+<!--    <p class="muted small mono" id="pub-source-note">Loaded from <a href="bibliography.bib" style="text-decoration:underline;">bibliography.bib</a></p> -->
 
     <ul class="pub-list" id="pub-list">
       <li class="pub-item"><p class="muted small">Loading publications…</p></li>

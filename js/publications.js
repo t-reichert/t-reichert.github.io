@@ -319,12 +319,21 @@ function buildLinks(entry) {
   return links;
 }
 
+// Rebuilds a clean BibTeX block for display, leaving out fields people don't
+// need for citing you (currently just `abstract` — it has its own button).
+function buildBibtexText(entry, excludeFields = []) {
+  const keys = Object.keys(entry.fields).filter(k => !excludeFields.includes(k));
+  const width = keys.reduce((max, k) => Math.max(max, k.length), 0);
+  const lines = keys.map(k => `  ${k.padEnd(width)} = {${entry.fields[k]}},`);
+  return `@${entry.type}{${entry.key},\n${lines.join("\n")}\n}`;
+}
+
 function renderEntry(entry) {
   const cat = categorize(entry);
   const tag = TAG_MAP[cat] || TAG_MAP.other;
-  // NOTE: title is left with its $...$ math spans intact (escaped for HTML
-  // safety, but not stripped) — KaTeX's auto-render finds and typesets them
-  // after this HTML is inserted into the page.
+  // NOTE: title/abstract are left with $...$ math spans intact (escaped for
+  // HTML safety, but not stripped) — KaTeX's auto-render finds and typesets
+  // them after this HTML is inserted into the page.
   const title = escapeHtml(latexField(entry.fields.title || "Untitled"));
   const meta = buildMeta(entry);
   const authorsHtml = buildAuthorsHtml(entry);
@@ -332,6 +341,15 @@ function renderEntry(entry) {
   const linksHtml = links.map(l =>
     `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener">${l.label}</a>`
   ).join("");
+
+  const hasAbstract = Boolean(entry.fields.abstract);
+  const abstractHtml = hasAbstract ? escapeHtml(latexField(entry.fields.abstract)) : "";
+  const abstractBtn = hasAbstract ? `<button class="abstract-toggle" type="button">[ abstract ]</button>` : "";
+  const abstractBlock = hasAbstract ? `<div class="abstract-block"><p>${abstractHtml}</p></div>` : "";
+
+  // People citing you don't need the abstract text in the BibTeX block —
+  // it has its own toggle instead.
+  const bibtexText = buildBibtexText(entry, ["abstract"]);
 
   return `
     <li class="pub-item" data-type="${cat}">
@@ -343,9 +361,11 @@ function renderEntry(entry) {
       ${authorsHtml ? `<p class="pub-authors">${authorsHtml}</p>` : ""}
       <div class="pub-links">
         ${linksHtml}
+        ${abstractBtn}
         <button class="bibtex-toggle" type="button">[ bibtex ]</button>
       </div>
-      <div class="bibtex-block">${escapeHtml(entry.raw)}</div>
+      ${abstractBlock}
+      <div class="bibtex-block">${escapeHtml(bibtexText)}</div>
     </li>`;
 }
 

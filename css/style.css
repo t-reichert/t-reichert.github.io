@@ -374,7 +374,7 @@ main { display: block; }
   border-radius: 999px;
 }
 .pub-links a:hover { border-color: var(--violet); }
-.bibtex-toggle {
+.bibtex-toggle, .abstract-toggle {
   background: none; border: none; color: var(--text-faint);
   font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; padding: 5px 2px;
 }
@@ -392,6 +392,19 @@ main { display: block; }
   overflow-x: auto;
 }
 .bibtex-block.open { display: block; }
+.abstract-block {
+  display: none;
+  margin-top: 12px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+.abstract-block p { margin: 0; }
+.abstract-block.open { display: block; }
 
 /* ---------------- Gallery ---------------- */
 .gallery-grid {

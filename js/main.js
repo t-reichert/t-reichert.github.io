@@ -69,14 +69,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ---------- BibTeX toggles (event delegation, works for dynamically-added items) ----------
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".bibtex-toggle");
-    if (!btn) return;
-    const block = btn.closest(".pub-item").querySelector(".bibtex-block");
-    block.classList.toggle("open");
-    btn.textContent = block.classList.contains("open") ? "[ hide bibtex ]" : "[ bibtex ]";
-  });
+// ---------- BibTeX toggles (event delegation, works for dynamically-added items) ----------
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".bibtex-toggle");
+  if (!btn) return;
+  const block = btn.closest(".pub-item").querySelector(".bibtex-block");
+  block.classList.toggle("open");
+  btn.textContent = block.classList.contains("open") ? "[ hide bibtex ]" : "[ bibtex ]";
+});
+
+// ---------- Abstract toggles ----------
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".abstract-toggle");
+  if (!btn) return;
+  const block = btn.closest(".pub-item").querySelector(".abstract-block");
+  block.classList.toggle("open");
+  btn.textContent = block.classList.contains("open") ? "[ hide abstract ]" : "[ abstract ]";
+});
 
   // ---------- Gallery lightbox ----------
   const lightbox = document.querySelector(".lightbox");

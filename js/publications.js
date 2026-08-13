@@ -4,6 +4,67 @@
 // Edit bibliography.bib and push — the list updates automatically.
 // ==========================================================================
 
+// ==========================================================================
+// Builds the publication list on publications.html from bibliography.bib.
+// No build step: the .bib file is fetched and parsed in the browser.
+// Edit bibliography.bib and push — the list updates automatically.
+//
+// Relies on js/bibtex-utils.js being loaded first.
+// ==========================================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const listEl = document.getElementById("pub-list");
+  if (!listEl) return;
+
+  const citationsPromise = fetchCitationsData();
+  citationsPromise.then(renderCitationStat);
+
+  fetch("bibliography.bib")
+    .then(res => {
+      if (!res.ok) throw new Error(`bibliography.bib returned ${res.status}`);
+      return res.text();
+    })
+    .then(text => {
+      const entries = parseBibtex(text);
+      if (entries.length === 0) {
+        listEl.innerHTML = emptyState("No entries found in bibliography.bib yet.");
+        return;
+      }
+      entries.sort((a, b) => (resolveYear(b) || 0) - (resolveYear(a) || 0));
+
+      return citationsPromise.then(citationsData => {
+        setupChartViews(entries, citationsData);
+
+        const citationLookup = buildCitationLookup(citationsData);
+        renderGroupedList(entries, listEl, citationLookup);
+        wireYearToggles();
+
+        if (window.renderMathInElement) {
+          window.renderMathInElement(listEl, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false },
+            ],
+            throwOnError: false,
+          });
+        }
+
+        if (window.applyPubFilters) window.applyPubFilters();
+      });
+    })
+    .catch(err => {
+      listEl.innerHTML = emptyState(
+        `Couldn't load bibliography.bib (${escapeHtml(err.message)}). ` +
+        `If you're opening this file directly (file://), browsers block that fetch — ` +
+        `run a local server instead, or check the file is deployed alongside this page.`
+      );
+    });
+});
+
+function emptyState(msg) {
+  return `<li class="pub-item"><p class="muted small">${msg}</p></li>`;
+}
+
 function renderEntry(entry, citationLookup) {
   const cat = categorize(entry);
   const tag = TAG_MAP[cat] || TAG_MAP.other;

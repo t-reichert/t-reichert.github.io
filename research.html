@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css" integrity="sha384-1vdNCNel6Tx/NQa8IR1mGOGKsbGreCkOPfbtPPnUURJ5Tu2PRVfQ/7KLZC+Pi1p1" crossorigin="anonymous">
 </head>
 <body>
 
@@ -41,62 +42,136 @@
   <div class="container page-header">
     <p class="eyebrow">Research</p>
     <h1>Research</h1>
-    <p class="muted">A detailed summary of the research I am conducting, I have done and plan to do.</p>
+    <p class="muted">A detailed summary of the research I am conducting, I have done, and plan to do.</p>
   </div>
 
-  <section class="section container">
-    <div class="section-head"><p class="eyebrow">Current research</p><h2>FRISCO3 - A Multi-fluid hydrodynamics with continuous decoupling</h2></div>
-    <ul class="timeline">
-      <li>
-        <div class="what">The FRISCO3 model</div>
-        <div class="where">The ACRONYM (FRISCO3) is a relativistic multi-fluid hydrodynamic model with continuous hadron decoupling. 
-            The model disentangles the hydrodynamic equations of motion of the whole system into multiple fluids. A useful choice is 
-            to treat the two incoming nuclei as two distinct nuclear fluids, which generate the equilibrated fireball fluid dynamically 
-            via friction terms. The fluid-fluid friction terms are modeled using the inelastic nucleon-nucleon cross section for energy- 
-            and longitudinal momentum loss as well as baryon number transport into the fireball, i.e. stopping. The continuous decoupling 
-            generalizes the commonly applied Cooper-Frye procedure and overcomes its caveats along the way. The continuous decoupling 
-            determines the local decoupling rate of a hadron based on its origin cell's emissivity, which is given from the differential 
-            scattering rate, the in-medium width and the expansion rate, and the survival probability or optical depth along the hadron's 
-            trajectory to the free streaming regime.</div>
-      </li>
-      <li>
-        <span class="when"></span>
-        <div class="what">Physical motivation</div>
-        <div class="where"></div>
-      </li>
-      <li>
-        <span class="when"></span>
-        <div class="what">Research program</div>
-        <div class="where"></div>
-      </li>
-    </ul>
+  <div class="container" style="padding-top:8px;">
+    <!-- Jump-nav: add one <a href="#slug"> per project below as you add more. -->
+    <nav class="project-toc" aria-label="Jump to project">
+      <a href="#frisco3">FRISCO3</a>
+    </nav>
+  </div>
 
-  <div class="section-head"><h2>FRISCO3 - A Multi-fluid hydrodynamics with continuous decoupling</h2></div>
-    <ul class="timeline">
-      <li>
-        <div class="what">The FRISCO3 model</div>
-        <div class="where">The ACRONYM (FRISCO3) is a relativistic multi-fluid hydrodynamic model with continuous hadron decoupling. 
-            The model disentangles the hydrodynamic equations of motion of the whole system into multiple fluids. A useful choice is 
-            to treat the two incoming nuclei as two distinct nuclear fluids, which generate the equilibrated fireball fluid dynamically 
-            via friction terms. The fluid-fluid friction terms are modeled using the inelastic nucleon-nucleon cross section for energy- 
-            and longitudinal momentum loss as well as baryon number transport into the fireball, i.e. stopping. The continuous decoupling 
-            generalizes the commonly applied Cooper-Frye procedure and overcomes its caveats along the way. The continuous decoupling 
-            determines the local decoupling rate of a hadron based on its origin cell's emissivity, which is given from the differential 
-            scattering rate, the in-medium width and the expansion rate, and the survival probability or optical depth along the hadron's 
-            trajectory to the free streaming regime.</div>
-      </li>
-      <li>
-        <span class="when"></span>
-        <div class="what">Physical motivation</div>
-        <div class="where"></div>
-      </li>
-      <li>
-        <span class="when"></span>
-        <div class="what">Research program</div>
-        <div class="where"></div>
-      </li>
-    </ul>
-  </section>
+  <!-- ====================================================================
+       PROJECT: FRISCO3
+       Copy this whole <article class="project"> block (including its
+       closing tag, far below) to add another project. Give the new one
+       its own id= and add a matching link in the .project-toc above.
+       ==================================================================== -->
+  <article class="project container" id="frisco3">
+
+    <div class="project-header">
+      <h2>FRISCO3 — Multi-Fluid Hydrodynamics with Continuous Decoupling</h2>
+      <span class="tag tag-gold">Active</span>
+      <span class="project-years">[2023] – present</span>
+    </div>
+    <p class="project-tagline">A relativistic multi-fluid hydrodynamic model that replaces the standard
+      instantaneous freeze-out with a continuous, cell-by-cell decoupling of hadrons from the fluid.</p>
+    <div class="project-tags">
+      <span class="tag tag-violet">hydrodynamics</span>
+      <span class="tag tag-violet">heavy-ion collisions</span>
+      <span class="tag tag-violet">freeze-out</span>
+    </div>
+
+    <!-- Intro + lede figure -->
+    <div class="project-row" style="margin-top:32px;">
+      <div>
+        <h3>The model</h3>
+        <p>FRISCO3 is a relativistic multi-fluid hydrodynamic model with continuous hadron decoupling.
+          The model disentangles the hydrodynamic equations of motion of the whole system into multiple
+          fluids. A useful choice is to treat the two incoming nuclei as two distinct nuclear fluids,
+          which generate the equilibrated fireball fluid dynamically via friction terms.</p>
+        <p>The fluid-fluid friction terms are modeled using the inelastic nucleon-nucleon cross section
+          for energy- and longitudinal-momentum loss, as well as baryon-number transport into the
+          fireball — i.e. stopping.</p>
+        <p>The continuous decoupling generalizes the commonly applied Cooper–Frye procedure and overcomes
+          its caveats along the way. It determines the local decoupling rate of a hadron based on its
+          origin cell's emissivity — given by the differential scattering rate, the in-medium width, and
+          the expansion rate — and the survival probability (optical depth) along the hadron's trajectory
+          to the free-streaming regime.</p>
+      </div>
+      <figure class="project-figure gallery-item">
+        <img src="assets/images/gallery-1.svg" alt="[Replace with a FRISCO3 fluid-decomposition or freeze-out diagram]">
+        <figcaption>[Figure caption — e.g. "Schematic of the three-fluid decomposition: two nuclear fluids and the dynamically-generated fireball."]</figcaption>
+      </figure>
+    </div>
+
+    <!-- Motivation, figure on the left this time for rhythm -->
+    <div class="project-row reverse">
+      <figure class="project-figure gallery-item">
+        <img src="assets/images/gallery-2.svg" alt="[Replace with a motivating comparison plot]">
+        <figcaption>[Figure caption — e.g. observable(s) standard Cooper-Frye freeze-out struggles to describe.]</figcaption>
+      </figure>
+      <div>
+        <h3>Physical motivation</h3>
+        <p>[Why continuous decoupling matters: which observables or energy regimes expose the
+          shortcomings of an instantaneous, sharp freeze-out hypersurface, and what continuous
+          decoupling gets right instead. A sentence or two on the beam-energy range this targets.]</p>
+      </div>
+    </div>
+
+    <!-- Full-width section, no companion figure -->
+    <div class="project-section">
+      <h3>Research program</h3>
+      <p>[What's actively being worked on right now, and what's next — e.g. validation against
+        identified-particle spectra, extending to net-baryon fluctuations, coupling to a hadronic
+        afterburner, etc. Can be prose or a short list.]</p>
+    </div>
+
+    <!-- Key results: a row of figures -->
+    <div class="project-section">
+      <h3>Key results</h3>
+      <p>[One or two sentences introducing the result(s) shown below.]</p>
+    </div>
+    <div class="project-figure-row">
+      <figure class="project-figure gallery-item">
+        <img src="assets/images/gallery-3.svg" alt="[Replace with key result plot 1]">
+        <figcaption>[Caption for result 1.]</figcaption>
+      </figure>
+      <figure class="project-figure gallery-item">
+        <img src="assets/images/gallery-4.svg" alt="[Replace with key result plot 2]">
+        <figcaption>[Caption for result 2.]</figcaption>
+      </figure>
+    </div>
+
+    <!-- Collapsible technical details -- native <details>, no JS needed.
+         KaTeX renders any $...$ math inside it same as everywhere else. -->
+    <details class="project-details">
+      <summary>Technical details</summary>
+      <div class="details-body">
+        <p>[Equations, numerical scheme, or implementation notes for readers who want the full
+          technical picture. Math works here too, e.g. the friction-term ansatz:</p>
+        <p>$$ F^\mu_{i} = -\sum_{j \neq i} \int d\sigma_{ij}\, n_i n_j \, (u_i^\mu - u_j^\mu) $$</p>
+        <p>— replace with the real expression.]</p>
+      </div>
+    </details>
+
+    <!-- GitHub/code + related talks/outreach -->
+    <div class="project-links btn-row">
+      <a class="btn" href="#" target="_blank" rel="noopener">Code (GitHub) ↗</a>
+      <a class="btn" href="talks.html">Related talks →</a>
+      <a class="btn" href="outreach.html">Related outreach →</a>
+    </div>
+
+    <!-- Related publications, auto-filled from bibliography.bib by js/research.js.
+         Replace the example keys with real citation keys from your .bib file. -->
+    <div class="related-pubs" data-keys="">
+      <p class="eyebrow" style="margin-bottom:10px;">Related publications</p>
+      <ul class="related-pubs-list"></ul>
+    </div>
+
+  </article>
+  <!-- END PROJECT: FRISCO3 -->
+
+</main>
+
+<div class="lightbox">
+  <button class="lightbox-close" aria-label="Close">✕</button>
+  <div>
+    <img src="" alt="">
+    <p class="lightbox-cap"></p>
+  </div>
+</div>
 
 <footer class="site-footer container">
   <div class="inner">
@@ -111,6 +186,10 @@
   </div>
 </footer>
 
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.js" integrity="sha384-ycJ6GAwiS15LoUPipwJOrWTvkUHl/YqELValBwI5I4awP1EeEQJYarj+w85ntcz7" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
+<script src="js/bibtex-utils.js"></script>
+<script src="js/research.js"></script>
 </body>
 </html>

@@ -706,6 +706,182 @@ main { display: block; }
 }
 [data-theme="light"] .theme-toggle-thumb { transform: translateX(18px); }
 
+/* ==========================================================================
+   Research page
+   ========================================================================== */
+
+/* Jump-nav / table of contents at the top of the page */
+.project-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+.project-toc a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-decoration: none;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 14px;
+  transition: border-color .15s ease, color .15s ease;
+}
+.project-toc a:hover { color: var(--text); border-color: var(--violet); }
+
+/* One project block */
+.project {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--border-soft);
+  scroll-margin-top: 90px; /* so #anchors land below the sticky nav */
+}
+.project:last-of-type { border-bottom: none; }
+
+.project-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-bottom: 6px;
+}
+.project-header h2 { margin: 0; font-size: clamp(1.4rem, 2.6vw, 1.8rem); }
+.project-years {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
+.project-tagline {
+  font-style: italic;
+  color: var(--text-muted);
+  max-width: 640px;
+  margin: 0 0 28px;
+}
+
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+
+/* Text + figure pairing. Default: text left, figure right. .reverse flips
+   it (used to alternate rhythm down the page). Stacks on narrow screens. */
+.project-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 36px;
+}
+.project-row.reverse { grid-template-columns: 1fr 1.3fr; }
+.project-row.reverse .project-figure { order: -1; }
+@media (max-width: 800px) {
+  .project-row, .project-row.reverse { grid-template-columns: 1fr; }
+  .project-row.reverse .project-figure { order: 0; }
+}
+
+.project-row h3, .project-section h3 {
+  font-size: 1.05rem;
+  margin: 0 0 12px;
+}
+.project-row p, .project-section p { margin: 0 0 1em; }
+.project-row p:last-child, .project-section p:last-child { margin-bottom: 0; }
+
+/* A figure card: image + caption. Reuses the site-wide lightbox (see
+   main.js) via the .gallery-item class -- click to enlarge, no extra JS. */
+.project-figure {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: pointer;
+}
+.project-figure img { width: 100%; display: block; }
+.project-figure figcaption {
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  line-height: 1.5;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* A full-width section with no companion figure */
+.project-section { max-width: 720px; margin-bottom: 36px; }
+
+/* A row of figures (e.g. two key-result plots side by side) */
+.project-figure-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+@media (max-width: 700px) { .project-figure-row { grid-template-columns: 1fr; } }
+
+/* Collapsible "technical details" -- native <details>, no JS needed */
+.project-details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 4px 20px;
+  margin-bottom: 36px;
+}
+.project-details summary {
+  cursor: pointer;
+  padding: 14px 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  list-style: none;
+}
+.project-details summary::-webkit-details-marker { display: none; }
+.project-details summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--text-faint);
+  transition: transform .15s ease;
+}
+.project-details[open] summary::before { transform: rotate(90deg); }
+.project-details .details-body { padding: 0 0 20px; color: var(--text-muted); }
+.project-details .details-body p:first-child { margin-top: 0; }
+
+/* GitHub/code button + related talks/outreach links */
+.project-links { margin-bottom: 36px; }
+
+/* Related publications, pulled live from bibliography.bib by js/research.js
+   matching each project's data-keys attribute */
+.related-pubs { margin-bottom: 8px; }
+.related-pubs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.related-pub {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 0.9rem;
+}
+.related-pub-title { font-weight: 600; }
+.related-pub-meta { color: var(--text-faint); font-family: var(--font-mono); font-size: 0.78rem; }
+.related-pub-links { display: flex; gap: 6px; margin-left: auto; }
+.related-pub-links a {
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--violet);
+  border: 1px solid var(--border);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.related-pub-links a:hover { border-color: var(--violet); }
+
 /* ---------------- Contact ---------------- */
 .contact-grid {
   display: grid;

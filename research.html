@@ -65,8 +65,7 @@
       <span class="tag tag-gold">Active</span>
       <span class="project-years">[2023] – present</span>
     </div>
-    <p class="project-tagline">A relativistic multi-fluid hydrodynamic model that replaces the standard
-      instantaneous freeze-out with a continuous, cell-by-cell decoupling of hadrons from the fluid.</p>
+    <p class="project-tagline">A relativistic multi-fluid hydrodynamic model with a continuous decoupling of hadrons from the fluid.</p>
     <div class="project-tags">
       <span class="tag tag-violet">hydrodynamics</span>
       <span class="tag tag-violet">heavy-ion collisions</span>
@@ -77,18 +76,20 @@
     <div class="project-row" style="margin-top:32px;">
       <div>
         <h3>The model</h3>
-        <p>FRISCO3 is a relativistic multi-fluid hydrodynamic model with continuous hadron decoupling.
+        <p>FRISCO3 (3-Fluid Relativistic heavy Ion collision Simulation with Continuous decOupling) 
+          is a relativistic multi-fluid hydrodynamic model with continuous hadron decoupling.
           The model disentangles the hydrodynamic equations of motion of the whole system into multiple
           fluids. A useful choice is to treat the two incoming nuclei as two distinct nuclear fluids,
-          which generate the equilibrated fireball fluid dynamically via friction terms.</p>
-        <p>The fluid-fluid friction terms are modeled using the inelastic nucleon-nucleon cross section
+          which dynamically generate the equilibrated fireball, the third fluid, via friction terms.</p>
+        <p>The fluid-fluid friction terms are derived from the measured inelastic nucleon-nucleon cross section
           for energy- and longitudinal-momentum loss, as well as baryon-number transport into the
           fireball — i.e. stopping.</p>
-        <p>The continuous decoupling generalizes the commonly applied Cooper–Frye procedure and overcomes
-          its caveats along the way. It determines the local decoupling rate of a hadron based on its
-          origin cell's emissivity — given by the differential scattering rate, the in-medium width, and
-          the expansion rate — and the survival probability (optical depth) along the hadron's trajectory
+        <p>The continuous decoupling is a generalization of the commonly applied Cooper–Frye method and 
+          overcomes its caveats. The local decoupling rate of a hadron is determined from the local
+          emissivity, given by the scattering rate, the in-medium width, and the expansion rate, 
+          and the survival probability, or optical depth, along the hadron's trajectory
           to the free-streaming regime.</p>
+        <p>The model is thus ideally suited for studying compressed baryonic matter at the upcoming FAIR facility.</p>
       </div>
       <figure class="project-figure gallery-item">
         <img src="assets/images/gallery-1.svg" alt="[Replace with a FRISCO3 fluid-decomposition or freeze-out diagram]">
@@ -104,18 +105,18 @@
       </figure>
       <div>
         <h3>Physical motivation</h3>
-        <p>[Why continuous decoupling matters: which observables or energy regimes expose the
-          shortcomings of an instantaneous, sharp freeze-out hypersurface, and what continuous
-          decoupling gets right instead. A sentence or two on the beam-energy range this targets.]</p>
+        <p><h2>Three-fluids:</h2> </p>
+        <p><h2>Continuous decoupling:</h2> </p>
       </div>
     </div>
 
     <!-- Full-width section, no companion figure -->
     <div class="project-section">
       <h3>Research program</h3>
-      <p>[What's actively being worked on right now, and what's next — e.g. validation against
-        identified-particle spectra, extending to net-baryon fluctuations, coupling to a hadronic
-        afterburner, etc. Can be prose or a short list.]</p>
+      <p><h2>&Lambda; polarization &amp; vorticity:</h2></p>
+      <p><h2>Onset of deconfinement:</h2></p>
+      <p><h2>Di-lepton production</h2></p>
+      <p><h2>EoS and flow</h2></p>
     </div>
 
     <!-- Key results: a row of figures -->
@@ -148,9 +149,9 @@
 
     <!-- GitHub/code + related talks/outreach -->
     <div class="project-links btn-row">
-      <a class="btn" href="#" target="_blank" rel="noopener">Code (GitHub) ↗</a>
-      <a class="btn" href="talks.html">Related talks →</a>
-      <a class="btn" href="outreach.html">Related outreach →</a>
+      <!-- <a class="btn" href="#" target="_blank" rel="noopener">Code (GitHub) ↗</a> -->
+      <!-- <a class="btn" href="talks.html">Related talks →</a> -->
+      <!-- <a class="btn" href="outreach.html">Related outreach →</a> -->
     </div>
 
     <!-- Related publications, auto-filled from bibliography.bib by js/research.js.

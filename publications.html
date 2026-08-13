@@ -49,12 +49,19 @@
   </div>
 
   <section class="section container" style="border-bottom:none;">
-    <div class="pub-chart" id="pub-chart" aria-label="Publications per year"></div>
+    <div class="pub-chart" id="pub-chart-card">
+      <div class="pub-chart-toolbar">
+        <span class="pub-chart-title mono" id="pub-chart-title">Publications per year</span>
+      </div>
+      <div class="pub-chart-body-wrap">
+        <button class="pub-chart-arrow left" id="pub-chart-prev" type="button" aria-label="Previous chart" style="display:none;">&#8249;</button>
+        <div class="pub-chart-body" id="pub-chart-body"></div>
+        <button class="pub-chart-arrow right" id="pub-chart-next" type="button" aria-label="Next chart" style="display:none;">&#8250;</button>
+      </div>
+    </div>
 
     <p class="citation-stat" id="citation-stat" style="display:none;"></p>
-    <p class="mono small muted" id="citation-chart-label" style="display:none; margin:-6px 0 8px;">Citations per year</p>
-    <div class="pub-chart" id="citation-chart" aria-label="Citations per year" style="display:none;"></div>
-
+    
     <div class="pub-controls">
       <input class="pub-search" type="text" placeholder="Search by title, author, or keyword…">
       <button class="filter-chip active" data-type="all">All</button>

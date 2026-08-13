@@ -545,6 +545,42 @@ main { display: block; }
   box-shadow: var(--shadow-card);
 }
 .pub-chart svg { width: 100%; height: auto; display: block; cursor: default; }
+.pub-chart-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.pub-chart-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.pub-chart-body-wrap { position: relative; }
+.pub-chart-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.pub-chart-arrow:hover { border-color: var(--violet); }
+.pub-chart-arrow.left { left: 4px; }
+.pub-chart-arrow.right { right: 4px; }
 .pub-chart-bar rect { cursor: pointer; transition: filter .15s ease; }
 .pub-chart-bar:hover rect { filter: brightness(1.18); }
 .pub-chart-bar {
@@ -553,7 +589,7 @@ main { display: block; }
   transform: scaleY(0);
   transition: transform .7s cubic-bezier(.16,1,.3,1);
 }
-.pub-chart.loaded .pub-chart-bar { transform: scaleY(1); }
+.pub-chart-body.loaded .pub-chart-bar { transform: scaleY(1); }
 .pub-chart-year {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -563,20 +599,6 @@ main { display: block; }
   font-family: var(--font-mono);
   font-size: 10px;
   fill: var(--text-muted);
-}
-.citation-stat {
-  font-size: 0.95rem;
-  margin: 0 0 18px;
-  color: var(--text);
-}
-.citation-stat strong {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 600;
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /* ---------------- Publications: foldable year groups ---------------- */

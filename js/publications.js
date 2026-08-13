@@ -17,14 +17,14 @@ const TAG_MAP = {
 document.addEventListener("DOMContentLoaded", () => {
   const listEl = document.getElementById("pub-list");
   if (!listEl) return; // not on the publications page
-  const chartEl = document.getElementById("pub-chart");
 
-  // Fetched once, shared between the citation summary (stat + chart, which
-  // doesn't depend on the publication list) and the per-paper citation
-  // counts (which do -- so entries only render once this has resolved,
-  // avoiding a race where counts could arrive before their DOM elements exist).
+  // Fetched once, shared between the citation stat line, the chart-view
+  // toggle (which doesn't depend on the publication list), and the
+  // per-paper citation counts (which do -- so entries only render once this
+  // has resolved, avoiding a race where counts could arrive before their
+  // DOM elements exist).
   const citationsPromise = fetchCitationsData();
-  citationsPromise.then(renderCitationSummary);
+  citationsPromise.then(renderCitationStat);
 
   fetch("bibliography.bib")
     .then(res => {
@@ -37,15 +37,17 @@ document.addEventListener("DOMContentLoaded", () => {
         listEl.innerHTML = emptyState("No entries found in bibliography.bib yet.");
         return;
       }
-      entries.sort((a, b) => (parseInt(b.fields.year) || 0) - (parseInt(a.fields.year) || 0));
-
-      renderChart(entries, chartEl);
+      // Sort newest -> oldest by resolveYear (arXiv year when available).
+      entries.sort((a, b) => (resolveYear(b) || 0) - (resolveYear(a) || 0));
 
       return citationsPromise.then(citationsData => {
+        setupChartViews(entries, citationsData);
+
         const citationLookup = buildCitationLookup(citationsData);
         renderGroupedList(entries, listEl, citationLookup);
         wireYearToggles();
 
+        // KaTeX: render any $...$ math found inside the list (titles etc.)
         if (window.renderMathInElement) {
           window.renderMathInElement(listEl, {
             delimiters: [
@@ -225,18 +227,21 @@ function categorize(entry) {
   return "other";
 }
 
-function headingYear(entry) {
-  return parseInt(entry.fields.year, 10) || null;
-}
-
-function chartYear(entry) {
+// The year used for sorting, section-heading, and the publications-per-year
+// chart: prefers the arXiv posting year (decoded from the eprint ID's YYMM)
+// over the bibtex `year` field, since the latter is often the (sometimes
+// much later) journal publication year. This matches how INSPIRE orders
+// and groups papers on author pages. Note: the meta line under each entry
+// still shows its own `year` field as-is (that's the citation year, which
+// is correctly the journal year) -- only ordering/grouping changes here.
+function resolveYear(entry) {
   const eprint = entry.fields.eprint || "";
   const m = eprint.match(/^(\d{2})(\d{2})/);
   if (m) {
     const yy = parseInt(m[1], 10);
-    return 2000 + yy;
+    return 2000 + yy; // all modern arXiv IDs (post-2007) are 20xx
   }
-  return headingYear(entry);
+  return parseInt(entry.fields.year, 10) || null;
 }
 
 // -------------------- Author / meta / links --------------------
@@ -359,9 +364,9 @@ function renderEntry(entry, citationLookup) {
 // -------------------- Grouped, foldable year sections --------------------
 
 function renderGroupedList(entries, listEl, citationLookup) {
-  const groups = new Map();
+  const groups = new Map(); // year (number|"Undated") -> entries[]
   entries.forEach(e => {
-    const y = headingYear(e) || "Undated";
+    const y = resolveYear(e) || "Undated";
     if (!groups.has(y)) groups.set(y, []);
     groups.get(y).push(e);
   });
@@ -472,22 +477,76 @@ function renderBarChart(counts, chartEl, { ariaLabel, onBarClick, unitLabel = ""
   }
 }
 
-function renderChart(entries, chartEl) {
+// -------------------- Chart views (publications <-> citations, toggled by arrows) --------------------
+
+let chartViews = [];
+let chartViewIndex = 0;
+
+function computePubCounts(entries) {
   const counts = new Map();
   entries.forEach(e => {
-    const y = chartYear(e);
+    const y = resolveYear(e);
     if (!y) return;
     counts.set(y, (counts.get(y) || 0) + 1);
   });
-  renderBarChart(counts, chartEl, {
-    ariaLabel: "Publications per year",
-    unitLabel: "publication",
-    onBarClick: (year) => {
-      const group = document.querySelector(`.pub-year-group[data-year="${year}"]`);
-      if (!group) return;
-      group.classList.remove("collapsed");
-      group.scrollIntoView({ behavior: "smooth", block: "center" });
-    },
+  return counts;
+}
+
+function pubBarClickHandler(year) {
+  const group = document.querySelector(`.pub-year-group[data-year="${year}"]`);
+  if (!group) return;
+  group.classList.remove("collapsed");
+  group.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+// Called once both bibliography.bib and citations.json have resolved. Builds
+// the list of chart "views" to cycle through -- publications-per-year is
+// always first/default; citations-per-year is only added if citations.json
+// actually has per-year data (i.e. the script's been run and found at least
+// one INSPIRE-tracked paper).
+function setupChartViews(entries, citationsData) {
+  chartViews = [
+    { title: "Publications per year", counts: computePubCounts(entries), unitLabel: "publication", onBarClick: pubBarClickHandler },
+  ];
+  if (citationsData && citationsData.citations_by_year && Object.keys(citationsData.citations_by_year).length) {
+    const counts = new Map(Object.entries(citationsData.citations_by_year).map(([y, c]) => [parseInt(y, 10), c]));
+    chartViews.push({ title: "Citations per year", counts, unitLabel: "citation" });
+  }
+  chartViewIndex = 0;
+  renderCurrentChartView();
+  wireChartArrows();
+}
+
+function renderCurrentChartView() {
+  const cardEl = document.getElementById("pub-chart-card");
+  const bodyEl = document.getElementById("pub-chart-body");
+  const titleEl = document.getElementById("pub-chart-title");
+  const prevBtn = document.getElementById("pub-chart-prev");
+  const nextBtn = document.getElementById("pub-chart-next");
+  if (!cardEl || !bodyEl || chartViews.length === 0) return;
+
+  const view = chartViews[chartViewIndex];
+  if (titleEl) titleEl.textContent = view.title;
+  renderBarChart(view.counts, bodyEl, { ariaLabel: view.title, unitLabel: view.unitLabel, onBarClick: view.onBarClick });
+
+  const showArrows = chartViews.length > 1;
+  if (prevBtn) prevBtn.style.display = showArrows ? "" : "none";
+  if (nextBtn) nextBtn.style.display = showArrows ? "" : "none";
+}
+
+let chartArrowsWired = false;
+function wireChartArrows() {
+  if (chartArrowsWired) return; // only need to attach the listeners once
+  chartArrowsWired = true;
+  const prevBtn = document.getElementById("pub-chart-prev");
+  const nextBtn = document.getElementById("pub-chart-next");
+  if (prevBtn) prevBtn.addEventListener("click", () => {
+    chartViewIndex = (chartViewIndex - 1 + chartViews.length) % chartViews.length;
+    renderCurrentChartView();
+  });
+  if (nextBtn) nextBtn.addEventListener("click", () => {
+    chartViewIndex = (chartViewIndex + 1) % chartViews.length;
+    renderCurrentChartView();
   });
 }
 
@@ -509,29 +568,16 @@ function buildCitationLookup(data) {
   return map;
 }
 
-function renderCitationSummary(data) {
-  const chartEl = document.getElementById("citation-chart");
-  const labelEl = document.getElementById("citation-chart-label");
+// Just the total-citations stat line; the citations-per-year chart is
+// handled by setupChartViews() above since it shares the chart card with
+// the publications-per-year chart.
+function renderCitationStat(data) {
   const statEl = document.getElementById("citation-stat");
-  if (!chartEl && !statEl) return;
-
-  if (!data) {
-    if (chartEl) chartEl.style.display = "none";
-    if (labelEl) labelEl.style.display = "none";
-    if (statEl) statEl.style.display = "none";
-    return;
-  }
-
-  if (statEl) {
-    const total = data.total_citations ?? 0;
-    const exclSelf = data.total_citations_excl_self_citations;
-    statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}` +
-      (exclSelf != null && exclSelf !== total ? ` <span class="muted">(${exclSelf} excl. self-citations)</span>` : "");
-    statEl.style.display = "";
-  }
-  if (chartEl && data.citations_by_year && Object.keys(data.citations_by_year).length) {
-    const counts = new Map(Object.entries(data.citations_by_year).map(([y, c]) => [parseInt(y, 10), c]));
-    if (labelEl) labelEl.style.display = "";
-    renderBarChart(counts, chartEl, { ariaLabel: "Citations per year", unitLabel: "citation" });
-  }
+  if (!statEl) return;
+  if (!data) { statEl.style.display = "none"; return; }
+  const total = data.total_citations ?? 0;
+  const exclSelf = data.total_citations_excl_self_citations;
+  statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}` +
+    (exclSelf != null && exclSelf !== total ? ` <span class="muted">(${exclSelf} excl. self-citations)</span>` : "");
+  statEl.style.display = "";
 }

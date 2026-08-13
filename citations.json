@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-08-13T15:08:21+00:00",
+  "generated_at": "2026-08-13T16:49:54+00:00",
   "total_citations": 524,
-  "total_citations_excl_self_citations": 292,
+  "total_citations_excl_self_citations": 281,
   "citations_by_year": {
-    "2026": 94,
-    "2025": 128,
+    "2026": 95,
+    "2025": 130,
     "2024": 74,
-    "2023": 54,
-    "2022": 79,
+    "2023": 56,
+    "2022": 85,
     "2015": 1,
-    "2021": 20,
-    "2020": 19,
+    "2021": 21,
+    "2020": 23,
     "2019": 4
   },
   "papers": [
@@ -18,354 +18,478 @@
       "key": "Reichert:2026ztj",
       "source": "inspire",
       "recid": 3164611,
+      "found_via": "arxiv",
       "citation_count": 1,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2026dsb",
       "source": "inspire",
       "recid": 3125288,
+      "found_via": "arxiv",
       "citation_count": 0,
-      "citation_count_excl_self": 0
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Chimruang:2026jqe",
       "source": "inspire",
       "recid": 3123910,
+      "found_via": "arxiv",
       "citation_count": 1,
-      "citation_count_excl_self": 0
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Botvina:2026dpx",
-      "source": "crossref",
-      "citation_count": 0
+      "source": "inspire",
+      "recid": 3153144,
+      "found_via": "doi",
+      "citation_count": 0,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "OmanaKuttan:2026mcu",
-      "source": "crossref",
-      "citation_count": 0
+      "source": "inspire",
+      "recid": 3156157,
+      "found_via": "doi",
+      "citation_count": 0,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Messchendorp:2025men",
       "source": "inspire",
       "recid": 3093887,
+      "found_via": "arxiv",
       "citation_count": 18,
-      "citation_count_excl_self": 9
+      "citation_count_excl_self": 9,
+      "counted_in_totals": true
     },
     {
       "key": "Agarwal:2025ezo",
       "source": "inspire",
       "recid": 3086281,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 3
+      "citation_count_excl_self": 3,
+      "counted_in_totals": true
     },
     {
       "key": "Hofmann:2025vaf",
       "source": "inspire",
       "recid": 3076073,
+      "found_via": "arxiv",
       "citation_count": 0,
-      "citation_count_excl_self": 0
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Steinheimer:2025trr",
       "source": "inspire",
       "recid": 3073749,
+      "found_via": "arxiv",
       "citation_count": 4,
-      "citation_count_excl_self": 2
+      "citation_count_excl_self": 2,
+      "counted_in_totals": true
     },
     {
       "key": "Chabane:2025eir",
       "source": "inspire",
       "recid": 2968019,
+      "found_via": "arxiv",
       "citation_count": 1,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Steinheimer:2025mho",
       "source": "inspire",
       "recid": 2954442,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 4
+      "citation_count_excl_self": 4,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2025egt",
       "source": "inspire",
       "recid": 2929305,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 3
+      "citation_count_excl_self": 3,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2025rnw",
       "source": "inspire",
       "recid": 2915252,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 4
+      "citation_count_excl_self": 4,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2025znn",
       "source": "inspire",
       "recid": 2899794,
+      "found_via": "arxiv",
       "citation_count": 7,
-      "citation_count_excl_self": 5
+      "citation_count_excl_self": 5,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2025iwz",
       "source": "inspire",
       "recid": 2896598,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Steinheimer:2025hsr",
       "source": "inspire",
       "recid": 2871497,
+      "found_via": "arxiv",
       "citation_count": 21,
-      "citation_count_excl_self": 12
+      "citation_count_excl_self": 12,
+      "counted_in_totals": true
     },
     {
       "key": "Neidig:2025xgr",
       "source": "inspire",
       "recid": 2865805,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 2
+      "citation_count_excl_self": 2,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2024ayg",
       "source": "inspire",
       "recid": 2850184,
+      "found_via": "arxiv",
       "citation_count": 13,
-      "citation_count_excl_self": 8
+      "citation_count_excl_self": 8,
+      "counted_in_totals": true
     },
     {
       "key": "Bumnedpan:2024jit",
       "source": "inspire",
       "recid": 2847979,
+      "found_via": "arxiv",
       "citation_count": 2,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Buyukcizmeci:2024gpb",
       "source": "inspire",
       "recid": 2842089,
+      "found_via": "arxiv",
       "citation_count": 6,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Steinheimer:2024eha",
       "source": "inspire",
       "recid": 2836642,
+      "found_via": "arxiv",
       "citation_count": 26,
-      "citation_count_excl_self": 14
+      "citation_count_excl_self": 14,
+      "counted_in_totals": true
     },
     {
       "key": "Ergun:2024jwi",
       "source": "inspire",
       "recid": 2833252,
+      "found_via": "arxiv",
       "citation_count": 1,
-      "citation_count_excl_self": 0
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Chabane:2024crn",
       "source": "inspire",
       "recid": 2828349,
+      "found_via": "arxiv",
       "citation_count": 6,
-      "citation_count_excl_self": 3
+      "citation_count_excl_self": 3,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2024qdy",
       "source": "inspire",
       "recid": 2786529,
+      "found_via": "arxiv",
       "citation_count": 0,
-      "citation_count_excl_self": 0
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2024stb",
       "source": "inspire",
       "recid": 2769916,
+      "found_via": "arxiv",
       "citation_count": 3,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Buyukcizmeci:2023azb",
       "source": "inspire",
       "recid": 2672888,
+      "found_via": "arxiv",
       "citation_count": 18,
-      "citation_count_excl_self": 7
+      "citation_count_excl_self": 7,
+      "counted_in_totals": true
     },
     {
       "key": "Kittiratpattana:2023atz",
       "source": "inspire",
       "recid": 2778548,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2023eev",
       "source": "inspire",
       "recid": 2636742,
+      "found_via": "arxiv",
       "citation_count": 19,
-      "citation_count_excl_self": 9
+      "citation_count_excl_self": 9,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2023tww",
-      "source": "crossref",
-      "citation_count": 2
+      "source": "inspire",
+      "recid": 2640883,
+      "found_via": "doi",
+      "citation_count": 2,
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022mek",
       "source": "inspire",
       "recid": 2168904,
+      "found_via": "arxiv",
       "citation_count": 32,
-      "citation_count_excl_self": 23
+      "citation_count_excl_self": 23,
+      "counted_in_totals": true
     },
     {
       "key": "Kittiratpattana:2022ety",
       "source": "inspire",
       "recid": 2654631,
+      "found_via": "arxiv",
       "citation_count": 1,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Li:2022iil",
       "source": "inspire",
       "recid": 2147024,
+      "found_via": "arxiv",
       "citation_count": 45,
-      "citation_count_excl_self": 26
+      "citation_count_excl_self": 26,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022ate",
-      "source": "crossref",
-      "citation_count": 0
+      "source": "inspire",
+      "recid": 2150263,
+      "found_via": "doi",
+      "citation_count": 0,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022qys",
       "source": "inspire",
       "recid": 2626326,
+      "found_via": "arxiv",
       "citation_count": 3,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022yxq",
       "source": "inspire",
       "recid": 2106450,
+      "found_via": "arxiv",
       "citation_count": 6,
-      "citation_count_excl_self": 3
+      "citation_count_excl_self": 3,
+      "counted_in_totals": true
     },
     {
       "key": "Kittiratpattana:2022knq",
       "source": "inspire",
       "recid": 2091459,
+      "found_via": "arxiv",
       "citation_count": 10,
-      "citation_count_excl_self": 7
+      "citation_count_excl_self": 7,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022uha",
       "source": "inspire",
       "recid": 2090163,
+      "found_via": "arxiv",
       "citation_count": 11,
-      "citation_count_excl_self": 8
+      "citation_count_excl_self": 8,
+      "counted_in_totals": true
     },
     {
       "key": "Herold:2022laa",
       "source": "inspire",
       "recid": 2061348,
+      "found_via": "arxiv",
       "citation_count": 3,
-      "citation_count_excl_self": 1
+      "citation_count_excl_self": 1,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022gqe",
       "source": "inspire",
       "recid": 2059440,
+      "found_via": "arxiv",
       "citation_count": 11,
-      "citation_count_excl_self": 6
+      "citation_count_excl_self": 6,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2022qvt",
-      "source": "crossref",
-      "citation_count": 2
+      "source": "inspire",
+      "recid": 2026919,
+      "found_via": "doi",
+      "citation_count": 2,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2021ljd",
       "source": "inspire",
       "recid": 1968679,
+      "found_via": "arxiv",
       "citation_count": 20,
-      "citation_count_excl_self": 8
+      "citation_count_excl_self": 8,
+      "counted_in_totals": true
     },
     {
       "key": "Vormann:2021fat",
       "source": "inspire",
       "recid": 1937302,
+      "found_via": "arxiv",
       "citation_count": 0,
-      "citation_count_excl_self": 0
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Inghirami:2021zja",
       "source": "inspire",
       "recid": 1867477,
+      "found_via": "arxiv",
       "citation_count": 5,
-      "citation_count_excl_self": 2
+      "citation_count_excl_self": 2,
+      "counted_in_totals": true
     },
     {
       "key": "Hillmann:2020wzq",
-      "source": "crossref",
-      "citation_count": 2
+      "source": "inspire",
+      "recid": 1832378,
+      "found_via": "doi",
+      "citation_count": 2,
+      "citation_count_excl_self": 2,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2020oes",
       "source": "inspire",
       "recid": 1828948,
+      "found_via": "arxiv",
       "citation_count": 19,
-      "citation_count_excl_self": 10
+      "citation_count_excl_self": 10,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2020yhx",
       "source": "inspire",
       "recid": 1806549,
+      "found_via": "arxiv",
       "citation_count": 20,
-      "citation_count_excl_self": 5
+      "citation_count_excl_self": 5,
+      "counted_in_totals": true
     },
     {
       "key": "Gaebel:2020wid",
       "source": "inspire",
       "recid": 1802511,
+      "found_via": "arxiv",
       "citation_count": 17,
-      "citation_count_excl_self": 6
+      "citation_count_excl_self": 6,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2020uxs",
       "source": "inspire",
       "recid": 1792120,
+      "found_via": "arxiv",
       "citation_count": 14,
-      "citation_count_excl_self": 4
+      "citation_count_excl_self": 4,
+      "counted_in_totals": true
     },
     {
       "key": "Bleicher:2019oog",
-      "source": "crossref",
-      "citation_count": 4
+      "source": "inspire",
+      "recid": 1779943,
+      "found_via": "doi",
+      "citation_count": 4,
+      "citation_count_excl_self": 2,
+      "counted_in_totals": true
     },
     {
       "key": "Hillmann:2019cfr",
-      "source": "crossref",
-      "citation_count": 3
+      "source": "inspire",
+      "recid": 1779945,
+      "found_via": "doi",
+      "citation_count": 3,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2019zab",
-      "source": "crossref",
-      "citation_count": 3
+      "source": "inspire",
+      "recid": 1779947,
+      "found_via": "doi",
+      "citation_count": 3,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true
     },
     {
       "key": "Hillmann:2019wlt",
       "source": "inspire",
       "recid": 1743167,
+      "found_via": "arxiv",
       "citation_count": 54,
-      "citation_count_excl_self": 30
+      "citation_count_excl_self": 30,
+      "counted_in_totals": true
     },
     {
       "key": "Reichert:2019lny",
       "source": "inspire",
       "recid": 1727184,
+      "found_via": "arxiv",
       "citation_count": 20,
-      "citation_count_excl_self": 8
+      "citation_count_excl_self": 8,
+      "counted_in_totals": true
     },
     {
       "key": "REICHERT2021117526",
@@ -388,5 +512,5 @@
       "error": "no citation source available"
     }
   ],
-  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph). Papers resolved via Crossref or citecount_manual contribute to total_citations but not to the per-year breakdown, since neither source exposes a citing-paper list."
+  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph), and counts each citation the year the CITING paper appeared, aggregated across all of your papers -- not the year your own paper was published. Papers resolved via Crossref or citecount_manual contribute to total_citations but not to the per-year breakdown, since neither source exposes a citing-paper list. Entries that resolve to the same INSPIRE record as an earlier entry (e.g. a preprint + its later published version) are only counted once in the totals/chart -- see each paper's 'counted_in_totals' flag."
 }

@@ -577,7 +577,6 @@ function renderCitationStat(data) {
   if (!data) { statEl.style.display = "none"; return; }
   const total = data.total_citations ?? 0;
   const exclSelf = data.total_citations_excl_self_citations;
-  statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}` +
-    (exclSelf != null && exclSelf !== total ? ` <span class="muted">(${exclSelf} excl. self-citations)</span>` : "");
+  statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}`;
   statEl.style.display = "";
 }

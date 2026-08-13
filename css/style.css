@@ -360,7 +360,19 @@ main { display: block; }
 }
 .pub-item .pub-top { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; flex-wrap: nowrap; }
 .pub-title { font-weight: 600; font-size: 1rem; margin: 0 0 6px; flex: 1 1 auto; min-width: 0; }
-.pub-top .tag { flex: 0 0 auto; }
+.pub-top-right {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+.pub-citecount {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
 .pub-meta { color: var(--text-muted); font-size: 0.88rem; margin: 0 0 8px; }
 .pub-authors { color: var(--text-faint); font-size: 0.85rem; margin: 0 0 10px; }
 .pub-authors .me { color: var(--text); font-weight: 600; }

@@ -4,7 +4,7 @@
 // Edit bibliography.bib and push — the list updates automatically.
 // ==========================================================================
 
-const MY_NAME_MATCHES = ["Rieger"];
+const MY_NAME_MATCHES = ["Reichert", "Reichert, Tom", "Reichert, T.", "Tom Reichert", "T. Reichert"];
 
 const TAG_MAP = {
   journal:     { label: "Journal",     cls: "tag-gold" },
@@ -19,7 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!listEl) return; // not on the publications page
   const chartEl = document.getElementById("pub-chart");
 
-  loadCitations(); // independent of bibliography.bib; fails quietly if citations.json doesn't exist yet
+  // Fetched once, shared between the citation summary (stat + chart, which
+  // doesn't depend on the publication list) and the per-paper citation
+  // counts (which do -- so entries only render once this has resolved,
+  // avoiding a race where counts could arrive before their DOM elements exist).
+  const citationsPromise = fetchCitationsData();
+  citationsPromise.then(renderCitationSummary);
 
   fetch("bibliography.bib")
     .then(res => {
@@ -35,20 +40,24 @@ document.addEventListener("DOMContentLoaded", () => {
       entries.sort((a, b) => (parseInt(b.fields.year) || 0) - (parseInt(a.fields.year) || 0));
 
       renderChart(entries, chartEl);
-      renderGroupedList(entries, listEl);
-      wireYearToggles();
 
-      if (window.renderMathInElement) {
-        window.renderMathInElement(listEl, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-          throwOnError: false,
-        });
-      }
+      return citationsPromise.then(citationsData => {
+        const citationLookup = buildCitationLookup(citationsData);
+        renderGroupedList(entries, listEl, citationLookup);
+        wireYearToggles();
 
-      if (window.applyPubFilters) window.applyPubFilters();
+        if (window.renderMathInElement) {
+          window.renderMathInElement(listEl, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false },
+            ],
+            throwOnError: false,
+          });
+        }
+
+        if (window.applyPubFilters) window.applyPubFilters();
+      });
     })
     .catch(err => {
       listEl.innerHTML = emptyState(
@@ -303,7 +312,7 @@ function buildBibtexText(entry, excludeFields = []) {
   return `@${entry.type}{${entry.key},\n${lines.join("\n")}\n}`;
 }
 
-function renderEntry(entry) {
+function renderEntry(entry, citationLookup) {
   const cat = categorize(entry);
   const tag = TAG_MAP[cat] || TAG_MAP.other;
   const title = escapeHtml(latexField(entry.fields.title || "Untitled"));
@@ -321,11 +330,19 @@ function renderEntry(entry) {
 
   const bibtexText = buildBibtexText(entry, ["abstract"]);
 
+  const citeCount = citationLookup ? citationLookup.get(entry.key) : undefined;
+  const citeCountHtml = citeCount != null
+    ? `<span class="pub-citecount">${citeCount} citation${citeCount === 1 ? "" : "s"}</span>`
+    : "";
+
   return `
-    <li class="pub-item" data-type="${cat}">
+    <li class="pub-item" data-type="${cat}" data-key="${escapeHtml(entry.key)}">
       <div class="pub-top">
         <h3 class="pub-title">${title}</h3>
-        <span class="tag ${tag.cls}">${tag.label}</span>
+        <div class="pub-top-right">
+          <span class="tag ${tag.cls}">${tag.label}</span>
+          ${citeCountHtml}
+        </div>
       </div>
       <p class="pub-meta">${meta}</p>
       ${authorsHtml ? `<p class="pub-authors">${authorsHtml}</p>` : ""}
@@ -341,7 +358,7 @@ function renderEntry(entry) {
 
 // -------------------- Grouped, foldable year sections --------------------
 
-function renderGroupedList(entries, listEl) {
+function renderGroupedList(entries, listEl, citationLookup) {
   const groups = new Map();
   entries.forEach(e => {
     const y = headingYear(e) || "Undated";
@@ -357,7 +374,7 @@ function renderGroupedList(entries, listEl) {
 
   listEl.innerHTML = years.map(year => {
     const groupEntries = groups.get(year);
-    const itemsHtml = groupEntries.map(renderEntry).join("");
+    const itemsHtml = groupEntries.map(e => renderEntry(e, citationLookup)).join("");
     return `
       <li class="pub-year-group" data-year="${year}">
         <button class="pub-year-toggle" type="button" aria-expanded="true">
@@ -476,34 +493,45 @@ function renderChart(entries, chartEl) {
 
 // -------------------- Citations (from citations.json, see scripts/fetch_citations.py) --------------------
 
-function loadCitations() {
+function fetchCitationsData() {
+  return fetch("citations.json")
+    .then(res => (res.ok ? res.json() : null))
+    .catch(() => null);
+}
+
+function buildCitationLookup(data) {
+  const map = new Map();
+  if (data && Array.isArray(data.papers)) {
+    data.papers.forEach(p => {
+      if (p.citation_count != null) map.set(p.key, p.citation_count);
+    });
+  }
+  return map;
+}
+
+function renderCitationSummary(data) {
   const chartEl = document.getElementById("citation-chart");
   const labelEl = document.getElementById("citation-chart-label");
   const statEl = document.getElementById("citation-stat");
   if (!chartEl && !statEl) return;
 
-  fetch("citations.json")
-    .then(res => {
-      if (!res.ok) throw new Error(`citations.json returned ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      if (statEl) {
-        const total = data.total_citations ?? 0;
-        const exclSelf = data.total_citations_excl_self_citations;
-        statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}` +
-          (exclSelf != null && exclSelf !== total ? ` <span class="muted">(${exclSelf} excl. self-citations)</span>` : "");
-        statEl.style.display = "";
-      }
-      if (chartEl && data.citations_by_year && Object.keys(data.citations_by_year).length) {
-        const counts = new Map(Object.entries(data.citations_by_year).map(([y, c]) => [parseInt(y, 10), c]));
-        if (labelEl) labelEl.style.display = "";
-        renderBarChart(counts, chartEl, { ariaLabel: "Citations per year", unitLabel: "citation" });
-      }
-    })
-    .catch(() => {
-      if (chartEl) chartEl.style.display = "none";
-      if (labelEl) labelEl.style.display = "none";
-      if (statEl) statEl.style.display = "none";
-    });
+  if (!data) {
+    if (chartEl) chartEl.style.display = "none";
+    if (labelEl) labelEl.style.display = "none";
+    if (statEl) statEl.style.display = "none";
+    return;
+  }
+
+  if (statEl) {
+    const total = data.total_citations ?? 0;
+    const exclSelf = data.total_citations_excl_self_citations;
+    statEl.innerHTML = `<strong>${total}</strong> citation${total === 1 ? "" : "s"}` +
+      (exclSelf != null && exclSelf !== total ? ` <span class="muted">(${exclSelf} excl. self-citations)</span>` : "");
+    statEl.style.display = "";
+  }
+  if (chartEl && data.citations_by_year && Object.keys(data.citations_by_year).length) {
+    const counts = new Map(Object.entries(data.citations_by_year).map(([y, c]) => [parseInt(y, 10), c]));
+    if (labelEl) labelEl.style.display = "";
+    renderBarChart(counts, chartEl, { ariaLabel: "Citations per year", unitLabel: "citation" });
+  }
 }

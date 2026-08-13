@@ -25,20 +25,37 @@ How each entry is resolved, in order:
   3. Else if the entry has a `doi` field, it's looked up on INSPIRE-HEP by
      DOI first (same total + per-year breakdown as step 2 -- many papers are
      on INSPIRE even when the .bib entry itself has no `eprint` field, e.g.
-     an incomplete entry or a proceedings entry with only a DOI). If INSPIRE
-     genuinely has no record for that DOI, it tries Semantic Scholar and
-     Crossref (both free, no API key) and uses whichever returns the higher
-     count -- Semantic Scholar indexes more broadly than Crossref (e.g.
-     interdisciplinary venues), so for a paper outside your main field it's
-     often meaningfully more complete. Neither gives a per-year breakdown
-     (no citing-paper list available from either), which is why INSPIRE is
-     always tried first when possible.
+     an incomplete entry or a proceedings entry with only a DOI). Only if
+     INSPIRE genuinely has no record for that DOI does it fall back to
+     Crossref's `is-referenced-by-count`, which gives a total but no
+     per-year breakdown (Crossref doesn't expose a citing-paper list, and
+     it only sees citations from other Crossref-registered, mostly
+     published works -- never from arXiv preprints, which is how most HEP
+     citations actually happen, often long before journal publication. So
+     this fallback path will typically undercount vs. the real INSPIRE
+     number, which is exactly why INSPIRE is always tried first).
   4. Else: skipped, with a warning printed.
+
+Additionally, ANY entry (regardless of which path above resolved its total)
+can carry a `citeyears_manual` field for a hand-transcribed per-year
+breakdown, e.g.:
+
+    citeyears_manual = {2022:2, 2023:5, 2024:3}
+
+Use this for papers whose total came from Crossref/Semantic Scholar/
+citecount_manual (none of which expose a citing-paper list) when you still
+want them represented in the per-year chart -- e.g. copied from a Scopus
+"cited by" results page, which isn't something this script can fetch
+automatically (it's login-gated and blocks automated access). This is
+independent of the total-citation count, so the per-year sum for that paper
+can legitimately differ slightly from its total if Scopus's index differs
+from whatever source supplied the total -- that's expected, not a bug.
 
 Concretely, your REICHERT2021117526 entry (not on INSPIRE) should have a
 `doi` field so step 3 picks it up automatically -- no special-casing needed
 in this script. If it doesn't have a DOI either, add `citecount_manual`
-with whatever number you find on the journal's page.
+with whatever number you find on the journal's page, and optionally
+`citeyears_manual` if you want it in the per-year chart too.
 
 Rate limits: INSPIRE allows 15 requests / 5s per IP; this script paces
 itself well under that and backs off automatically on HTTP 429.
@@ -282,6 +299,33 @@ def merge_year_counts(target, source):
         target[year] = target.get(year, 0) + count
 
 
+def parse_citeyears_manual(raw):
+    """Parses a hand-entered per-year breakdown like '2022:2, 2023:5, 2024:3'
+    (e.g. transcribed from a Scopus 'cited by' list) into {year: count}."""
+    result = {}
+    for part in raw.split(","):
+        part = part.strip()
+        if not part or ":" not in part:
+            continue
+        year, count = part.split(":", 1)
+        year = year.strip()
+        count = re.sub(r"[^\d]", "", count)
+        if year and count:
+            result[year] = result.get(year, 0) + int(count)
+    return result
+
+
+def apply_citeyears_manual(fields, citations_by_year):
+    """Applies a `citeyears_manual` field (if present) to citations_by_year.
+    Called for every entry regardless of source/outcome, including lookup
+    failures -- that's exactly when a manual override matters most."""
+    if "citeyears_manual" in fields:
+        manual_years = parse_citeyears_manual(fields["citeyears_manual"])
+        if manual_years:
+            merge_year_counts(citations_by_year, manual_years)
+            print(f"    + manual per-year breakdown added: {manual_years}")
+
+
 def process_inspire_record(key, recid, cc, cc_excl, via, seen_recids, totals, citations_by_year, papers):
     """Shared handling for a record found on INSPIRE, whether we found it by
     arXiv ID or by DOI: dedup against recids already counted, add to the
@@ -334,6 +378,7 @@ def main():
             result = inspire_lookup_by_arxiv(fields["eprint"])
             if result is None:
                 papers.append({"key": key, "source": "inspire", "error": "lookup failed"})
+                apply_citeyears_manual(fields, citations_by_year)
                 continue
             recid, cc, cc_excl = result
             process_inspire_record(key, recid, cc, cc_excl, "arxiv", seen_recids, totals, citations_by_year, papers)
@@ -362,6 +407,7 @@ def main():
                 candidates = [(n, src) for n, src in [(s2_count, "semanticscholar"), (cr_count, "crossref")] if n is not None]
                 if not candidates:
                     papers.append({"key": key, "source": None, "error": "not found on INSPIRE, Semantic Scholar, or Crossref"})
+                    apply_citeyears_manual(fields, citations_by_year)
                     continue
                 count, source = max(candidates, key=lambda c: c[0])
                 print(f"    Not on INSPIRE. Semantic Scholar: {s2_count if s2_count is not None else 'n/a'}, "
@@ -374,6 +420,8 @@ def main():
         else:
             print("    no eprint, doi, or citecount_manual field -- skipped")
             papers.append({"key": key, "source": None, "error": "no citation source available"})
+
+        apply_citeyears_manual(fields, citations_by_year)
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),

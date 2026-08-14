@@ -9,7 +9,7 @@
 const MY_NAME_MATCHES = ["Reichert", "Reichert, Tom", "Reichert, T.", "Tom Reichert", "T. Reichert"];
 
 const TAG_MAP = {
-  journal:     { label: "Journal",     cls: "tag-gold" },
+  journal:     { label: "Journal",     cls: "tag-magenta" },
   proceedings: { label: "Proceedings", cls: "tag-magenta" },
   preprint:    { label: "Preprint",    cls: "tag-violet" },
   thesis:      { label: "Thesis",      cls: "tag-gold" },

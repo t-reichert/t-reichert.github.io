@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const citationLookup = buildCitationLookup(citationsData);
         renderGroupedList(entries, listEl, citationLookup);
+        renderCitationMiniCharts(citationLookup.yearsMap);
         wireYearToggles();
 
         if (window.renderMathInElement) {
@@ -68,6 +69,9 @@ function emptyState(msg) {
 function renderEntry(entry, citationLookup) {
   const cat = categorize(entry);
   const tag = TAG_MAP[cat] || TAG_MAP.other;
+  // NOTE: title is left with its $...$ math spans intact (escaped for HTML
+  // safety, but not stripped) — KaTeX's auto-render finds and typesets them
+  // after this HTML is inserted into the page. Same treatment for abstract.
   const title = escapeHtml(latexField(entry.fields.title || "Untitled"));
   const meta = buildMeta(entry);
   const authorsHtml = buildAuthorsHtml(entry);
@@ -81,11 +85,23 @@ function renderEntry(entry, citationLookup) {
   const abstractBtn = hasAbstract ? `<button class="abstract-toggle" type="button">[ abstract ]</button>` : "";
   const abstractBlock = hasAbstract ? `<div class="abstract-block"><p>${abstractHtml}</p></div>` : "";
 
-  const bibtexText = buildBibtexText(entry, ["abstract"]);
+  // People citing you don't need the abstract text, or the citation-fetcher
+  // script's own bookkeeping fields, in the BibTeX block they'd actually use.
+  const bibtexText = buildBibtexText(entry, ["abstract", "citecount_manual", "citeyears_manual"]);
 
-  const citeCount = citationLookup ? citationLookup.get(entry.key) : undefined;
+  const citeCount = citationLookup ? citationLookup.countMap.get(entry.key) : undefined;
   const citeCountHtml = citeCount != null
     ? `<span class="pub-citecount">${citeCount} citation${citeCount === 1 ? "" : "s"}</span>`
+    : "";
+
+  // Per-paper citation history: only present (and thus only shown) for
+  // papers where scripts/fetch_citations.py could get a per-year breakdown
+  // (INSPIRE-tracked papers, or ones with a hand-entered citeyears_manual).
+  const citeYears = citationLookup ? citationLookup.yearsMap.get(entry.key) : undefined;
+  const hasCiteYears = Boolean(citeYears && Object.keys(citeYears).length);
+  const citationsBtn = hasCiteYears ? `<button class="citations-toggle" type="button">[ citations ]</button>` : "";
+  const citationsBlock = hasCiteYears
+    ? `<div class="citations-block"><div class="citations-chart pub-chart-body" data-key="${escapeHtml(entry.key)}"></div></div>`
     : "";
 
   return `
@@ -101,9 +117,11 @@ function renderEntry(entry, citationLookup) {
       ${authorsHtml ? `<p class="pub-authors">${authorsHtml}</p>` : ""}
       <div class="pub-links">
         ${linksHtml}
+        ${citationsBtn}
         ${abstractBtn}
         <button class="bibtex-toggle" type="button">[ bibtex ]</button>
       </div>
+      ${citationsBlock}
       ${abstractBlock}
       <div class="bibtex-block">${escapeHtml(bibtexText)}</div>
     </li>`;
@@ -138,6 +156,22 @@ function renderGroupedList(entries, listEl, citationLookup) {
         <ul class="pub-year-items">${itemsHtml}</ul>
       </li>`;
   }).join("");
+}
+
+// Renders each pub-item's hidden per-paper citation-history chart (built
+// lazily-visible: the SVG is drawn now, but stays hidden via CSS until the
+// person clicks that entry's [ citations ] toggle -- see wireCitationToggles
+// in main.js for the click handling, same pattern as bibtex/abstract).
+function renderCitationMiniCharts(yearsMap) {
+  document.querySelectorAll(".citations-chart").forEach(chartEl => {
+    const years = yearsMap.get(chartEl.dataset.key);
+    if (!years) return;
+    const counts = new Map(Object.entries(years).map(([y, c]) => [parseInt(y, 10), c]));
+    renderBarChart(counts, chartEl, {
+      ariaLabel: `Citations per year for ${chartEl.dataset.key}`,
+      unitLabel: "citation",
+    });
+  });
 }
 
 function wireYearToggles() {
@@ -307,13 +341,17 @@ function fetchCitationsData() {
 }
 
 function buildCitationLookup(data) {
-  const map = new Map();
+  const countMap = new Map();
+  const yearsMap = new Map();
   if (data && Array.isArray(data.papers)) {
     data.papers.forEach(p => {
-      if (p.citation_count != null) map.set(p.key, p.citation_count);
+      if (p.citation_count != null) countMap.set(p.key, p.citation_count);
+      if (p.citations_by_year && Object.keys(p.citations_by_year).length) {
+        yearsMap.set(p.key, p.citations_by_year);
+      }
     });
   }
-  return map;
+  return { countMap, yearsMap };
 }
 
 // Just the total-citations stat line; the citations-per-year chart is

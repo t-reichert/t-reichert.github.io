@@ -87,6 +87,15 @@ document.addEventListener("click", (e) => {
   btn.textContent = block.classList.contains("open") ? "[ hide abstract ]" : "[ abstract ]";
 });
 
+// ---------- Per-paper citation-history toggles ----------
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".citations-toggle");
+  if (!btn) return;
+  const block = btn.closest(".pub-item").querySelector(".citations-block");
+  block.classList.toggle("open");
+  btn.textContent = block.classList.contains("open") ? "[ hide citations ]" : "[ citations ]";
+});
+
   // ---------- Gallery lightbox ----------
   const lightbox = document.querySelector(".lightbox");
   if (lightbox) {

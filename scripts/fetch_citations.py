@@ -315,37 +315,50 @@ def parse_citeyears_manual(raw):
     return result
 
 
-def apply_citeyears_manual(fields, citations_by_year):
-    """Applies a `citeyears_manual` field (if present) to citations_by_year.
-    Called for every entry regardless of source/outcome, including lookup
-    failures -- that's exactly when a manual override matters most."""
+def apply_citeyears_manual(fields, citations_by_year, papers):
+    """Applies a `citeyears_manual` field (if present) to citations_by_year
+    AND to this entry's own record in `papers` (so the site can show a
+    per-paper chart, not just the site-wide aggregate). Called for every
+    entry regardless of source/outcome, including lookup failures -- that's
+    exactly when a manual override matters most. Assumes `papers[-1]` is
+    this entry's just-appended record (true everywhere this is called)."""
     if "citeyears_manual" in fields:
         manual_years = parse_citeyears_manual(fields["citeyears_manual"])
         if manual_years:
             merge_year_counts(citations_by_year, manual_years)
+            if papers:
+                own = papers[-1].setdefault("citations_by_year", {})
+                merge_year_counts(own, manual_years)
             print(f"    + manual per-year breakdown added: {manual_years}")
 
 
-def process_inspire_record(key, recid, cc, cc_excl, via, seen_recids, totals, citations_by_year, papers):
+def process_inspire_record(key, recid, cc, cc_excl, via, seen_recids, totals, citations_by_year, papers, recid_year_cache):
     """Shared handling for a record found on INSPIRE, whether we found it by
-    arXiv ID or by DOI: dedup against recids already counted, add to the
-    running totals, fold its citing-papers into the per-year breakdown, and
-    record it in the papers list."""
+    arXiv ID or by DOI: dedup against recids already counted for the site-wide
+    totals/chart, but every entry still gets its OWN per-paper year breakdown
+    attached (via recid_year_cache, so a duplicate entry reuses the already-
+    fetched breakdown instead of hitting the API again)."""
     already_counted = recid in seen_recids
     print(f"    INSPIRE recid {recid} (via {via}): {cc} citations ({cc_excl} excl. self)"
           + ("  [already counted via another entry -- excluded from totals]" if already_counted else ""))
+
+    if recid and cc > 0 and recid not in recid_year_cache:
+        year_counts, missing = inspire_citations_by_year(recid)
+        recid_year_cache[recid] = year_counts
+        totals["missing_dates"] += missing
+    year_counts = recid_year_cache.get(recid, {})
+
     if not already_counted:
         seen_recids.add(recid)
         totals["citations"] += cc
         totals["citations_excl_self"] += cc_excl
-        if recid and cc > 0:
-            year_counts, missing = inspire_citations_by_year(recid)
-            merge_year_counts(citations_by_year, year_counts)
-            totals["missing_dates"] += missing
+        merge_year_counts(citations_by_year, year_counts)
+
     papers.append({
         "key": key, "source": "inspire", "recid": recid, "found_via": via,
         "citation_count": cc, "citation_count_excl_self": cc_excl,
         "counted_in_totals": not already_counted,
+        "citations_by_year": dict(year_counts),  # copy -- this paper's own history
     })
 
 
@@ -360,6 +373,7 @@ def main():
     citations_by_year = {}
     papers = []
     seen_recids = set()
+    recid_year_cache = {}
     totals = {"citations": 0, "citations_excl_self": 0, "missing_dates": 0}
 
     for entry in entries:
@@ -378,10 +392,10 @@ def main():
             result = inspire_lookup_by_arxiv(fields["eprint"])
             if result is None:
                 papers.append({"key": key, "source": "inspire", "error": "lookup failed"})
-                apply_citeyears_manual(fields, citations_by_year)
+                apply_citeyears_manual(fields, citations_by_year, papers)
                 continue
             recid, cc, cc_excl = result
-            process_inspire_record(key, recid, cc, cc_excl, "arxiv", seen_recids, totals, citations_by_year, papers)
+            process_inspire_record(key, recid, cc, cc_excl, "arxiv", seen_recids, totals, citations_by_year, papers, recid_year_cache)
 
         elif "doi" in fields:
             # Try INSPIRE by DOI first -- entries without an `eprint` field
@@ -395,7 +409,7 @@ def main():
             result = inspire_lookup_by_doi(fields["doi"])
             if result is not None:
                 recid, cc, cc_excl = result
-                process_inspire_record(key, recid, cc, cc_excl, "doi", seen_recids, totals, citations_by_year, papers)
+                process_inspire_record(key, recid, cc, cc_excl, "doi", seen_recids, totals, citations_by_year, papers, recid_year_cache)
             else:
                 # Not on INSPIRE. Try Semantic Scholar and Crossref and take
                 # the higher count -- Semantic Scholar indexes more broadly
@@ -407,7 +421,7 @@ def main():
                 candidates = [(n, src) for n, src in [(s2_count, "semanticscholar"), (cr_count, "crossref")] if n is not None]
                 if not candidates:
                     papers.append({"key": key, "source": None, "error": "not found on INSPIRE, Semantic Scholar, or Crossref"})
-                    apply_citeyears_manual(fields, citations_by_year)
+                    apply_citeyears_manual(fields, citations_by_year, papers)
                     continue
                 count, source = max(candidates, key=lambda c: c[0])
                 print(f"    Not on INSPIRE. Semantic Scholar: {s2_count if s2_count is not None else 'n/a'}, "
@@ -421,7 +435,7 @@ def main():
             print("    no eprint, doi, or citecount_manual field -- skipped")
             papers.append({"key": key, "source": None, "error": "no citation source available"})
 
-        apply_citeyears_manual(fields, citations_by_year)
+        apply_citeyears_manual(fields, citations_by_year, papers)
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),

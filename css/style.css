@@ -387,7 +387,7 @@ main { display: block; }
   border-radius: 999px;
 }
 .pub-links a:hover { border-color: var(--violet); }
-.bibtex-toggle, .abstract-toggle {
+.bibtex-toggle, .abstract-toggle, .citations-toggle {
   background: none; border: none; color: var(--text-faint);
   font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; padding: 5px 2px;
 }
@@ -418,6 +418,21 @@ main { display: block; }
 }
 .abstract-block p { margin: 0; }
 .abstract-block.open { display: block; }
+
+/* Per-paper citation-history block. .citations-chart also carries the
+   .pub-chart-body class, so it automatically reuses the bar/gradient/
+   grow-in-animation rules already defined for the page-level charts --
+   only the wrapper card and svg sizing need their own rules here. */
+.citations-block {
+  display: none;
+  margin-top: 12px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.citations-block.open { display: block; }
+.citations-block .citations-chart svg { width: 100%; height: auto; display: block; }
 
 /* ---------------- Gallery ---------------- */
 .gallery-grid {

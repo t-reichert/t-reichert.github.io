@@ -197,13 +197,20 @@ function wireYearToggles() {
 // -------------------- Generic per-year bar chart --------------------
 // Shared by the "publications per year" and "citations per year" charts.
 
-function renderBarChart(counts, chartEl, { ariaLabel, onBarClick, unitLabel = "" } = {}) {
+// All charts (publications-per-year, citations-per-year, and every
+// per-paper mini chart) start no later than this year, zero-padded up to
+// the first real data point -- so every chart on the page has the same
+// bar width/spacing and is visually comparable at a glance. If actual data
+// goes earlier than this, it's never truncated -- only used as a floor.
+const CHART_FLOOR_YEAR = 2019;
+
+function renderBarChart(counts, chartEl, { ariaLabel, onBarClick, unitLabel = "", floorYear = CHART_FLOOR_YEAR } = {}) {
   if (!chartEl) return;
   if (!counts || counts.size === 0) { chartEl.style.display = "none"; return; }
   chartEl.style.display = "";
 
   const years = [...counts.keys()];
-  const minYear = Math.min(...years);
+  const minYear = Math.min(floorYear, ...years);
   const maxYear = Math.max(...years);
   const allYears = [];
   for (let y = minYear; y <= maxYear; y++) allYears.push(y);

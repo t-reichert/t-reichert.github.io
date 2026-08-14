@@ -36,26 +36,10 @@ How each entry is resolved, in order:
      number, which is exactly why INSPIRE is always tried first).
   4. Else: skipped, with a warning printed.
 
-Additionally, ANY entry (regardless of which path above resolved its total)
-can carry a `citeyears_manual` field for a hand-transcribed per-year
-breakdown, e.g.:
-
-    citeyears_manual = {2022:2, 2023:5, 2024:3}
-
-Use this for papers whose total came from Crossref/Semantic Scholar/
-citecount_manual (none of which expose a citing-paper list) when you still
-want them represented in the per-year chart -- e.g. copied from a Scopus
-"cited by" results page, which isn't something this script can fetch
-automatically (it's login-gated and blocks automated access). This is
-independent of the total-citation count, so the per-year sum for that paper
-can legitimately differ slightly from its total if Scopus's index differs
-from whatever source supplied the total -- that's expected, not a bug.
-
 Concretely, your REICHERT2021117526 entry (not on INSPIRE) should have a
 `doi` field so step 3 picks it up automatically -- no special-casing needed
 in this script. If it doesn't have a DOI either, add `citecount_manual`
-with whatever number you find on the journal's page, and optionally
-`citeyears_manual` if you want it in the per-year chart too.
+with whatever number you find on the journal's page.
 
 Rate limits: INSPIRE allows 15 requests / 5s per IP; this script paces
 itself well under that and backs off automatically on HTTP 429.
@@ -208,8 +192,8 @@ def inspire_lookup_by_doi(doi):
     """Returns (recid, citation_count, citation_count_excl_self) or None.
     Unlike inspire_lookup_by_arxiv, a failure here is the expected/common
     case (the DOI just isn't on INSPIRE) rather than a real error, so this
-    doesn't print anything on failure -- the caller falls back to Semantic
-    Scholar/Crossref silently."""
+    doesn't print anything on failure -- the caller falls back to Crossref
+    silently."""
     safe_doi = urllib.parse.quote(doi, safe="")
     try:
         data = inspire_get(f"/doi/{safe_doi}")
@@ -222,31 +206,50 @@ def inspire_lookup_by_doi(doi):
     return recid, cc, cc_excl
 
 
-def inspire_citations_by_year(recid):
-    """Returns ({year: count}, missing_date_count) for papers citing this record."""
+def inspire_citations_by_year(recid, floor_year=None):
+    """Returns ({year: count}, missing_date_count, corrected_count) for
+    papers citing this record.
+
+    floor_year is this (cited) paper's own year -- a citation can't
+    legitimately predate the paper it cites. In practice a few records on
+    INSPIRE have a wrong `earliest_date` (e.g. an old, never-published arXiv
+    preprint that got replaced years later with a new version including the
+    citation -- the citing record's own earliest_date wasn't updated to
+    match). When a citing paper's year comes back earlier than floor_year,
+    this tries that citing paper's own journal publication year instead
+    (from publication_info), and only falls back to floor_year itself if
+    that's unavailable or also too early."""
     by_year = {}
     missing = 0
+    corrected = 0
     page = 1
     while True:
         data = inspire_get(
             "/literature",
-            params={"q": f"refersto:recid:{recid}", "fields": "earliest_date", "size": 250, "page": page},
+            params={"q": f"refersto:recid:{recid}", "fields": "earliest_date,publication_info", "size": 250, "page": page},
         )
         hits = data.get("hits", {}).get("hits", [])
         if not hits:
             break
         for hit in hits:
-            date = hit.get("metadata", {}).get("earliest_date")
-            if date:
-                year = date[:4]
-                by_year[year] = by_year.get(year, 0) + 1
-            else:
+            meta = hit.get("metadata", {})
+            date = meta.get("earliest_date")
+            if not date:
                 missing += 1
+                continue
+            year = int(date[:4])
+            if floor_year and year < floor_year:
+                pub_years = [int(p["year"]) for p in meta.get("publication_info", []) if p.get("year")]
+                better = next((y for y in pub_years if y >= floor_year), None)
+                year = better if better else floor_year
+                corrected += 1
+            year_str = str(year)
+            by_year[year_str] = by_year.get(year_str, 0) + 1
         total = data.get("hits", {}).get("total", 0)
         if page * 250 >= total:
             break
         page += 1
-    return by_year, missing
+    return by_year, missing, corrected
 
 
 # -------------------------------------------------------------------------
@@ -332,20 +335,30 @@ def apply_citeyears_manual(fields, citations_by_year, papers):
             print(f"    + manual per-year breakdown added: {manual_years}")
 
 
-def process_inspire_record(key, recid, cc, cc_excl, via, seen_recids, totals, citations_by_year, papers, recid_year_cache):
+def process_inspire_record(key, recid, cc, cc_excl, via, seen_recids, totals, citations_by_year, papers, recid_year_cache, floor_year):
     """Shared handling for a record found on INSPIRE, whether we found it by
     arXiv ID or by DOI: dedup against recids already counted for the site-wide
     totals/chart, but every entry still gets its OWN per-paper year breakdown
     attached (via recid_year_cache, so a duplicate entry reuses the already-
-    fetched breakdown instead of hitting the API again)."""
+    fetched breakdown instead of hitting the API again).
+
+    floor_year clamps out impossible pre-publication "citations" (see
+    inspire_citations_by_year). Note: if the same recid is reached from two
+    .bib entries with different floor_years (e.g. a preprint entry and its
+    later published-version entry, with different `year` fields), the floor
+    actually applied is whichever entry's lookup happened first and got
+    cached -- an acceptable simplification for how rare that combination is."""
     already_counted = recid in seen_recids
     print(f"    INSPIRE recid {recid} (via {via}): {cc} citations ({cc_excl} excl. self)"
           + ("  [already counted via another entry -- excluded from totals]" if already_counted else ""))
 
     if recid and cc > 0 and recid not in recid_year_cache:
-        year_counts, missing = inspire_citations_by_year(recid)
+        year_counts, missing, corrected = inspire_citations_by_year(recid, floor_year)
         recid_year_cache[recid] = year_counts
         totals["missing_dates"] += missing
+        totals["corrected_years"] += corrected
+        if corrected:
+            print(f"    (corrected {corrected} citing paper(s) with an impossible pre-{floor_year} date)")
     year_counts = recid_year_cache.get(recid, {})
 
     if not already_counted:
@@ -362,6 +375,20 @@ def process_inspire_record(key, recid, cc, cc_excl, via, seen_recids, totals, ci
     })
 
 
+def resolve_floor_year(fields):
+    """This bib entry's own year, preferring the arXiv-posting year decoded
+    from `eprint` (YYMM) over the bibtex `year` field -- mirrors resolveYear()
+    in js/publications.js, so "this paper's year" means the same thing on
+    both sides. Used as the floor a citation year can't legitimately predate."""
+    eprint = fields.get("eprint", "")
+    m = re.match(r"^(\d{2})(\d{2})", eprint)
+    if m:
+        return 2000 + int(m.group(1))
+    year = fields.get("year", "")
+    digits = re.sub(r"[^\d]", "", year)
+    return int(digits) if digits else None
+
+
 def main():
     if not BIB_PATH.exists():
         print(f"Couldn't find {BIB_PATH}", file=sys.stderr)
@@ -374,7 +401,7 @@ def main():
     papers = []
     seen_recids = set()
     recid_year_cache = {}
-    totals = {"citations": 0, "citations_excl_self": 0, "missing_dates": 0}
+    totals = {"citations": 0, "citations_excl_self": 0, "missing_dates": 0, "corrected_years": 0}
 
     for entry in entries:
         key = entry["key"]
@@ -395,7 +422,7 @@ def main():
                 apply_citeyears_manual(fields, citations_by_year, papers)
                 continue
             recid, cc, cc_excl = result
-            process_inspire_record(key, recid, cc, cc_excl, "arxiv", seen_recids, totals, citations_by_year, papers, recid_year_cache)
+            process_inspire_record(key, recid, cc, cc_excl, "arxiv", seen_recids, totals, citations_by_year, papers, recid_year_cache, resolve_floor_year(fields))
 
         elif "doi" in fields:
             # Try INSPIRE by DOI first -- entries without an `eprint` field
@@ -409,7 +436,7 @@ def main():
             result = inspire_lookup_by_doi(fields["doi"])
             if result is not None:
                 recid, cc, cc_excl = result
-                process_inspire_record(key, recid, cc, cc_excl, "doi", seen_recids, totals, citations_by_year, papers, recid_year_cache)
+                process_inspire_record(key, recid, cc, cc_excl, "doi", seen_recids, totals, citations_by_year, papers, recid_year_cache, resolve_floor_year(fields))
             else:
                 # Not on INSPIRE. Try Semantic Scholar and Crossref and take
                 # the higher count -- Semantic Scholar indexes more broadly
@@ -456,6 +483,10 @@ def main():
             + (f" {totals['missing_dates']} citing paper(s) had no retrievable date and "
                f"couldn't be placed in the per-year breakdown, though they still count "
                f"toward each paper's own citation_count." if totals["missing_dates"] else "")
+            + (f" {totals['corrected_years']} citing paper(s) had a date earlier than the "
+               f"cited paper itself (likely bad INSPIRE metadata, e.g. a replaced arXiv "
+               f"record) and had their year corrected to the citing paper's own journal "
+               f"year, or failing that, the cited paper's year." if totals["corrected_years"] else "")
         ),
     }
 
@@ -464,6 +495,8 @@ def main():
     print(f"Total citations: {totals['citations']} ({totals['citations_excl_self']} excl. self-citations)")
     if totals["missing_dates"]:
         print(f"Note: {totals['missing_dates']} citing paper(s) had no date and were excluded from the per-year breakdown.")
+    if totals["corrected_years"]:
+        print(f"Note: {totals['corrected_years']} citing paper(s) had an impossible pre-publication date and were corrected.")
 
 
 if __name__ == "__main__":

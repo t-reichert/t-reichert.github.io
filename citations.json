@@ -1,15 +1,14 @@
 {
-  "generated_at": "2026-08-14T00:05:23+00:00",
+  "generated_at": "2026-08-14T00:19:17+00:00",
   "total_citations": 524,
   "total_citations_excl_self_citations": 281,
   "citations_by_year": {
-    "2026": 101,
-    "2025": 134,
-    "2024": 84,
+    "2026": 102,
+    "2025": 136,
+    "2024": 83,
     "2023": 56,
-    "2022": 85,
-    "2015": 1,
-    "2021": 21,
+    "2022": 83,
+    "2021": 22,
     "2020": 23,
     "2019": 4
   },
@@ -162,8 +161,7 @@
       "citation_count_excl_self": 4,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2025": 4,
-        "2024": 1
+        "2025": 5
       }
     },
     {
@@ -175,9 +173,8 @@
       "citation_count_excl_self": 5,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 3,
-        "2025": 3,
-        "2023": 1
+        "2026": 4,
+        "2025": 3
       }
     },
     {
@@ -215,9 +212,8 @@
       "citation_count_excl_self": 2,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2025": 3,
-        "2026": 1,
-        "2024": 1
+        "2025": 4,
+        "2026": 1
       }
     },
     {
@@ -362,9 +358,8 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2025": 4,
-        "2024": 6,
-        "2023": 3,
-        "2022": 2,
+        "2024": 7,
+        "2023": 4,
         "2026": 4
       }
     },
@@ -546,7 +541,7 @@
       "citation_count_excl_self": 8,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2015": 1,
+        "2021": 1,
         "2022": 8,
         "2023": 6,
         "2024": 3,
@@ -760,5 +755,5 @@
       "error": "no citation source available"
     }
   ],
-  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph), and counts each citation the year the CITING paper appeared, aggregated across all of your papers -- not the year your own paper was published. Papers resolved via Semantic Scholar, Crossref, or citecount_manual contribute to total_citations but not to the per-year breakdown, since none of those sources expose a citing-paper list. Entries that resolve to the same INSPIRE record as an earlier entry (e.g. a preprint + its later published version) are only counted once in the totals/chart -- see each paper's 'counted_in_totals' flag."
+  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph), and counts each citation the year the CITING paper appeared, aggregated across all of your papers -- not the year your own paper was published. Papers resolved via Semantic Scholar, Crossref, or citecount_manual contribute to total_citations but not to the per-year breakdown, since none of those sources expose a citing-paper list. Entries that resolve to the same INSPIRE record as an earlier entry (e.g. a preprint + its later published version) are only counted once in the totals/chart -- see each paper's 'counted_in_totals' flag. 6 citing paper(s) had a date earlier than the cited paper itself (likely bad INSPIRE metadata, e.g. a replaced arXiv record) and had their year corrected to the citing paper's own journal year, or failing that, the cited paper's year."
 }

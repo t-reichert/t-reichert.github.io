@@ -22,27 +22,58 @@ How each entry is resolved, in order:
      by arXiv ID. This gives both a total count AND a real per-year
      breakdown, via INSPIRE's citation graph (found by asking "who cites
      this record", then reading the citing papers' own dates).
-  3. Else if the entry has a `doi` field, it's looked up on INSPIRE-HEP by
-     DOI first (same total + per-year breakdown as step 2 -- many papers are
-     on INSPIRE even when the .bib entry itself has no `eprint` field, e.g.
-     an incomplete entry or a proceedings entry with only a DOI). Only if
-     INSPIRE genuinely has no record for that DOI does it fall back to
-     Crossref's `is-referenced-by-count`, which gives a total but no
-     per-year breakdown (Crossref doesn't expose a citing-paper list, and
-     it only sees citations from other Crossref-registered, mostly
-     published works -- never from arXiv preprints, which is how most HEP
-     citations actually happen, often long before journal publication. So
-     this fallback path will typically undercount vs. the real INSPIRE
-     number, which is exactly why INSPIRE is always tried first).
+  3. Else if the entry has a `doi` field:
+       a. Looked up on INSPIRE-HEP by DOI first (same total + per-year
+          breakdown as step 2 -- many papers are on INSPIRE even when the
+          .bib entry itself has no `eprint` field, e.g. an incomplete entry
+          or a proceedings entry with only a DOI).
+       b. If not on INSPIRE, tried on OpenAlex next. Unlike Semantic
+          Scholar/Crossref below, OpenAlex's work object carries a genuine
+          per-year breakdown (`counts_by_year`), not just a total, so a
+          paper resolved here still gets its own citation-history chart.
+       c. Only if neither INSPIRE nor OpenAlex has the DOI does it fall
+          back to Semantic Scholar and Crossref (taking whichever gives
+          the higher count), both of which give a total only -- no
+          per-year breakdown, which is exactly the gap `citeyears_manual`
+          is for. Crossref in particular only sees citations from other
+          Crossref-registered, mostly published works -- never from arXiv
+          preprints, which is how most HEP citations actually happen,
+          often long before journal publication -- so it's tried last.
   4. Else: skipped, with a warning printed.
 
+Any citation year that comes back earlier than the cited paper's own year
+(from INSPIRE or OpenAlex -- e.g. a rare case where an old, never-published
+arXiv preprint got replaced years later with a new version including the
+citation, but the citing record's own date metadata wasn't updated to
+match) gets corrected: first by trying the citing paper's own journal
+publication year if available, falling back to the cited paper's own year
+if not. This is printed to the console whenever it happens.
+
+Additionally, ANY entry (regardless of which path above resolved its total)
+can carry a `citeyears_manual` field for a hand-transcribed per-year
+breakdown, e.g.:
+
+    citeyears_manual = {2022:2, 2023:5, 2024:3}
+
+Use this for papers whose total came from Semantic Scholar/Crossref/
+citecount_manual (the only sources above with no per-year data) when you
+still want them represented in the per-year chart -- e.g. copied from a
+Scopus "cited by" results page, which isn't something this script can fetch
+automatically (it's login-gated and blocks automated access). This is
+independent of the total-citation count, so the per-year sum for that paper
+can legitimately differ slightly from its total if Scopus's index differs
+from whatever source supplied the total -- that's expected, not a bug.
+
 Concretely, your REICHERT2021117526 entry (not on INSPIRE) should have a
-`doi` field so step 3 picks it up automatically -- no special-casing needed
-in this script. If it doesn't have a DOI either, add `citecount_manual`
-with whatever number you find on the journal's page.
+`doi` field so step 3 picks it up automatically -- it'll likely resolve via
+OpenAlex now, with a real per-year breakdown, no manual entry needed. Only
+add `citecount_manual`/`citeyears_manual` if it truly isn't on any of
+INSPIRE, OpenAlex, Semantic Scholar, or Crossref.
 
 Rate limits: INSPIRE allows 15 requests / 5s per IP; this script paces
-itself well under that and backs off automatically on HTTP 429.
+itself well under that and backs off automatically on HTTP 429. OpenAlex,
+Semantic Scholar, and Crossref are all free with generous limits for this
+kind of light, occasional use.
 """
 
 import json
@@ -269,11 +300,61 @@ def crossref_citation_count(doi):
 
 
 # -------------------------------------------------------------------------
-# Semantic Scholar (tried before Crossref for papers not on INSPIRE -- it
-# indexes more broadly than Crossref, e.g. citations from arXiv preprints
-# and interdisciplinary venues Crossref doesn't see, so it's often a
-# meaningfully better estimate for a paper outside your main field that
-# INSPIRE doesn't track.)
+# OpenAlex (tried before Semantic Scholar/Crossref for papers not on
+# INSPIRE -- unlike those two, OpenAlex's work object carries a genuine
+# per-year breakdown (counts_by_year), not just a total, so when it has the
+# paper we get real per-year data for it too, not just the total count.)
+# -------------------------------------------------------------------------
+
+OPENALEX_BASE = "https://api.openalex.org/works"
+OPENALEX_MAILTO = None  # optional: set to your email for OpenAlex's faster "polite pool"
+
+
+def openalex_lookup(doi, floor_year=None):
+    """Returns (total_citations, {year: count}, corrected_count) or None if
+    this DOI isn't on OpenAlex. counts_by_year only covers roughly the last
+    ten years (per OpenAlex's own docs -- years with zero citations are
+    omitted from it too), so very old citations may be under-represented in
+    the per-year breakdown even though the total (cited_by_count) is the
+    real all-time count. floor_year clamps out any impossible pre-
+    publication year the same way inspire_citations_by_year does, though
+    this should rarely trigger here since OpenAlex years come from the
+    citing paper's own publication_year, not a possibly-stale field."""
+    url = f"{OPENALEX_BASE}/https://doi.org/{urllib.parse.quote(doi, safe='')}"
+    params = {"mailto": OPENALEX_MAILTO} if OPENALEX_MAILTO else {}
+    try:
+        resp = requests.get(url, params=params, timeout=20)
+        time.sleep(REQUEST_PAUSE)
+        if resp.status_code == 404:
+            return None  # not on OpenAlex -- not an error
+        resp.raise_for_status()
+    except requests.HTTPError as e:
+        print(f"    OpenAlex lookup failed for doi:{doi}: {e}")
+        return None
+
+    data = resp.json()
+    total = data.get("cited_by_count", 0)
+    by_year = {}
+    corrected = 0
+    for item in data.get("counts_by_year", []):
+        year = item.get("year")
+        count = item.get("cited_by_count", 0)
+        if year is None or count == 0:
+            continue
+        if floor_year and year < floor_year:
+            year = floor_year
+            corrected += 1
+        year_str = str(year)
+        by_year[year_str] = by_year.get(year_str, 0) + count
+    return total, by_year, corrected
+
+
+# -------------------------------------------------------------------------
+# Semantic Scholar (tried after OpenAlex, before Crossref, for papers not
+# on INSPIRE or OpenAlex -- it indexes more broadly than Crossref, e.g.
+# citations from arXiv preprints and interdisciplinary venues Crossref
+# doesn't see, so it's often a meaningfully better estimate for a paper
+# outside your main field.)
 # -------------------------------------------------------------------------
 
 SEMANTIC_SCHOLAR_BASE = "https://api.semanticscholar.org/graph/v1"
@@ -437,26 +518,45 @@ def main():
             if result is not None:
                 recid, cc, cc_excl = result
                 process_inspire_record(key, recid, cc, cc_excl, "doi", seen_recids, totals, citations_by_year, papers, recid_year_cache, resolve_floor_year(fields))
-            else:
-                # Not on INSPIRE. Try Semantic Scholar and Crossref and take
-                # the higher count -- Semantic Scholar indexes more broadly
-                # (including some things Crossref misses), but coverage
-                # varies by paper, so neither is reliably better than the
-                # other across every field.
-                s2_count = semantic_scholar_citation_count(fields["doi"])
-                cr_count = crossref_citation_count(fields["doi"])
-                candidates = [(n, src) for n, src in [(s2_count, "semanticscholar"), (cr_count, "crossref")] if n is not None]
-                if not candidates:
-                    papers.append({"key": key, "source": None, "error": "not found on INSPIRE, Semantic Scholar, or Crossref"})
-                    apply_citeyears_manual(fields, citations_by_year, papers)
-                    continue
-                count, source = max(candidates, key=lambda c: c[0])
-                print(f"    Not on INSPIRE. Semantic Scholar: {s2_count if s2_count is not None else 'n/a'}, "
-                      f"Crossref: {cr_count if cr_count is not None else 'n/a'} -> using {source} ({count}) "
-                      f"(no per-year breakdown available from either)")
-                totals["citations"] += count
-                totals["citations_excl_self"] += count  # neither source distinguishes self-citations
-                papers.append({"key": key, "source": source, "citation_count": count})
+                apply_citeyears_manual(fields, citations_by_year, papers)
+                continue
+
+            # Not on INSPIRE. Try OpenAlex next -- unlike Semantic Scholar
+            # and Crossref (below), it gives a real per-year breakdown, not
+            # just a total, so a paper resolved here still gets its own
+            # citation-history chart on the site.
+            oa_result = openalex_lookup(fields["doi"], resolve_floor_year(fields))
+            if oa_result is not None:
+                total, by_year, corrected = oa_result
+                print(f"    Not on INSPIRE. OpenAlex: {total} citations"
+                      + (f" (corrected {corrected} pre-publication year(s))" if corrected else "")
+                      + (f" -- per-year: {by_year}" if by_year else " -- no per-year breakdown available"))
+                totals["citations"] += total
+                totals["citations_excl_self"] += total  # OpenAlex doesn't distinguish self-citations
+                totals["corrected_years"] += corrected
+                merge_year_counts(citations_by_year, by_year)
+                papers.append({"key": key, "source": "openalex", "citation_count": total, "citations_by_year": dict(by_year)})
+                apply_citeyears_manual(fields, citations_by_year, papers)
+                continue
+
+            # Not on INSPIRE or OpenAlex either. Try Semantic Scholar and
+            # Crossref and take the higher count -- neither gives a
+            # per-year breakdown, which is exactly the case citeyears_manual
+            # exists for.
+            s2_count = semantic_scholar_citation_count(fields["doi"])
+            cr_count = crossref_citation_count(fields["doi"])
+            candidates = [(n, src) for n, src in [(s2_count, "semanticscholar"), (cr_count, "crossref")] if n is not None]
+            if not candidates:
+                papers.append({"key": key, "source": None, "error": "not found on INSPIRE, OpenAlex, Semantic Scholar, or Crossref"})
+                apply_citeyears_manual(fields, citations_by_year, papers)
+                continue
+            count, source = max(candidates, key=lambda c: c[0])
+            print(f"    Not on INSPIRE or OpenAlex. Semantic Scholar: {s2_count if s2_count is not None else 'n/a'}, "
+                  f"Crossref: {cr_count if cr_count is not None else 'n/a'} -> using {source} ({count}) "
+                  f"(no per-year breakdown available from either)")
+            totals["citations"] += count
+            totals["citations_excl_self"] += count  # neither source distinguishes self-citations
+            papers.append({"key": key, "source": source, "citation_count": count})
 
         else:
             print("    no eprint, doi, or citecount_manual field -- skipped")

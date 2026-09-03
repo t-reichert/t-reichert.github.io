@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-21T17:38:27+00:00",
-  "total_citations": 527,
-  "total_citations_excl_self_citations": 283,
+  "generated_at": "2026-09-03T12:53:58+00:00",
+  "total_citations": 532,
+  "total_citations_excl_self_citations": 287,
   "citations_by_year": {
-    "2026": 103,
-    "2025": 137,
-    "2024": 84,
+    "2026": 106,
+    "2025": 138,
+    "2024": 85,
     "2023": 63,
     "2022": 91,
     "2021": 22,
@@ -40,11 +40,11 @@
       "source": "inspire",
       "recid": 3123910,
       "found_via": "arxiv",
-      "citation_count": 1,
+      "citation_count": 2,
       "citation_count_excl_self": 0,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 1
+        "2026": 2
       }
     },
     {
@@ -76,8 +76,8 @@
       "citation_count_excl_self": 10,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 18,
-        "2025": 1
+        "2026": 17,
+        "2025": 2
       }
     },
     {
@@ -132,11 +132,11 @@
       "source": "inspire",
       "recid": 2954442,
       "found_via": "arxiv",
-      "citation_count": 5,
-      "citation_count_excl_self": 4,
+      "citation_count": 6,
+      "citation_count_excl_self": 5,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 5
+        "2026": 6
       }
     },
     {
@@ -195,12 +195,12 @@
       "source": "inspire",
       "recid": 2871497,
       "found_via": "arxiv",
-      "citation_count": 22,
-      "citation_count_excl_self": 12,
+      "citation_count": 23,
+      "citation_count_excl_self": 13,
       "counted_in_totals": true,
       "citations_by_year": {
         "2025": 13,
-        "2026": 9
+        "2026": 10
       }
     },
     {
@@ -409,15 +409,15 @@
       "source": "inspire",
       "recid": 2147024,
       "found_via": "arxiv",
-      "citation_count": 44,
-      "citation_count_excl_self": 26,
+      "citation_count": 46,
+      "citation_count_excl_self": 28,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2024": 17,
+        "2024": 18,
         "2025": 10,
         "2023": 10,
         "2022": 6,
-        "2026": 1
+        "2026": 2
       }
     },
     {
@@ -569,8 +569,8 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2022": 2,
-        "2021": 1,
         "2025": 1,
+        "2021": 1,
         "2024": 1
       }
     },
@@ -615,8 +615,8 @@
         "2022": 7,
         "2021": 4,
         "2026": 1,
-        "2020": 2,
         "2025": 3,
+        "2020": 2,
         "2024": 2,
         "2023": 1
       }
@@ -703,9 +703,9 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2021": 5,
-        "2019": 2,
-        "2020": 10,
         "2022": 14,
+        "2020": 10,
+        "2019": 2,
         "2026": 3,
         "2024": 8,
         "2023": 4,
@@ -723,8 +723,8 @@
       "citations_by_year": {
         "2019": 2,
         "2020": 3,
-        "2024": 4,
         "2022": 4,
+        "2024": 4,
         "2025": 6,
         "2026": 1
       }
@@ -757,5 +757,5 @@
       "error": "no citation source available"
     }
   ],
-  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph), and counts each citation the year the CITING paper appeared, aggregated across all of your papers -- not the year your own paper was published. Papers resolved via Semantic Scholar, Crossref, or citecount_manual contribute to total_citations but not to the per-year breakdown, since none of those sources expose a citing-paper list. Entries that resolve to the same INSPIRE record as an earlier entry (e.g. a preprint + its later published version) are only counted once in the totals/chart -- see each paper's 'counted_in_totals' flag. 6 citing paper(s) had a date earlier than the cited paper itself (likely bad INSPIRE metadata, e.g. a replaced arXiv record) and had their year corrected to the citing paper's own journal year, or failing that, the cited paper's year."
+  "notes": "citations_by_year is built only from INSPIRE-tracked papers (via their citation graph), and counts each citation the year the CITING paper appeared, aggregated across all of your papers -- not the year your own paper was published. Papers resolved via Semantic Scholar, Crossref, or citecount_manual contribute to total_citations but not to the per-year breakdown, since none of those sources expose a citing-paper list. Entries that resolve to the same INSPIRE record as an earlier entry (e.g. a preprint + its later published version) are only counted once in the totals/chart -- see each paper's 'counted_in_totals' flag. 7 citing paper(s) had a date earlier than the cited paper itself (likely bad INSPIRE metadata, e.g. a replaced arXiv record) and had their year corrected to the citing paper's own journal year, or failing that, the cited paper's year."
 }

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-03T12:53:58+00:00",
-  "total_citations": 532,
-  "total_citations_excl_self_citations": 287,
+  "generated_at": "2026-09-15T09:24:36+00:00",
+  "total_citations": 542,
+  "total_citations_excl_self_citations": 292,
   "citations_by_year": {
-    "2026": 106,
+    "2026": 116,
     "2025": 138,
     "2024": 85,
     "2023": 63,
@@ -30,10 +30,12 @@
       "source": "inspire",
       "recid": 3125288,
       "found_via": "arxiv",
-      "citation_count": 0,
+      "citation_count": 1,
       "citation_count_excl_self": 0,
       "counted_in_totals": true,
-      "citations_by_year": {}
+      "citations_by_year": {
+        "2026": 1
+      }
     },
     {
       "key": "Chimruang:2026jqe",
@@ -72,11 +74,11 @@
       "source": "inspire",
       "recid": 3093887,
       "found_via": "arxiv",
-      "citation_count": 19,
-      "citation_count_excl_self": 10,
+      "citation_count": 21,
+      "citation_count_excl_self": 11,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 17,
+        "2026": 19,
         "2025": 2
       }
     },
@@ -85,11 +87,11 @@
       "source": "inspire",
       "recid": 3086281,
       "found_via": "arxiv",
-      "citation_count": 6,
+      "citation_count": 7,
       "citation_count_excl_self": 4,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 6
+        "2026": 7
       }
     },
     {
@@ -120,11 +122,11 @@
       "source": "inspire",
       "recid": 2968019,
       "found_via": "arxiv",
-      "citation_count": 1,
-      "citation_count_excl_self": 1,
+      "citation_count": 2,
+      "citation_count_excl_self": 2,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 1
+        "2026": 2
       }
     },
     {
@@ -195,12 +197,12 @@
       "source": "inspire",
       "recid": 2871497,
       "found_via": "arxiv",
-      "citation_count": 23,
-      "citation_count_excl_self": 13,
+      "citation_count": 25,
+      "citation_count_excl_self": 14,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2025": 13,
-        "2026": 10
+        "2026": 12,
+        "2025": 13
       }
     },
     {
@@ -221,11 +223,11 @@
       "source": "inspire",
       "recid": 2850184,
       "found_via": "arxiv",
-      "citation_count": 12,
+      "citation_count": 13,
       "citation_count_excl_self": 7,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 4,
+        "2026": 5,
         "2025": 6,
         "2024": 2
       }
@@ -381,14 +383,14 @@
       "source": "inspire",
       "recid": 2168904,
       "found_via": "arxiv",
-      "citation_count": 33,
-      "citation_count_excl_self": 24,
+      "citation_count": 34,
+      "citation_count_excl_self": 25,
       "counted_in_totals": true,
       "citations_by_year": {
         "2025": 13,
         "2023": 5,
         "2024": 5,
-        "2026": 7,
+        "2026": 8,
         "2022": 3
       }
     },
@@ -416,8 +418,8 @@
         "2024": 18,
         "2025": 10,
         "2023": 10,
-        "2022": 6,
-        "2026": 2
+        "2026": 2,
+        "2022": 6
       }
     },
     {
@@ -631,8 +633,8 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2021": 3,
-        "2020": 2,
         "2022": 8,
+        "2020": 2,
         "2023": 2,
         "2026": 1,
         "2025": 1
@@ -703,9 +705,9 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2021": 5,
-        "2022": 14,
         "2020": 10,
         "2019": 2,
+        "2022": 14,
         "2026": 3,
         "2024": 8,
         "2023": 4,
@@ -723,8 +725,8 @@
       "citations_by_year": {
         "2019": 2,
         "2020": 3,
-        "2022": 4,
         "2024": 4,
+        "2022": 4,
         "2025": 6,
         "2026": 1
       }
@@ -732,9 +734,9 @@
     {
       "key": "REICHERT2021117526",
       "source": "openalex",
-      "citation_count": 35,
+      "citation_count": 36,
       "citations_by_year": {
-        "2026": 4,
+        "2026": 5,
         "2025": 5,
         "2024": 11,
         "2023": 7,

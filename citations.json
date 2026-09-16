@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-15T09:24:36+00:00",
-  "total_citations": 542,
-  "total_citations_excl_self_citations": 292,
+  "generated_at": "2026-09-16T20:57:49+00:00",
+  "total_citations": 544,
+  "total_citations_excl_self_citations": 295,
   "citations_by_year": {
-    "2026": 116,
+    "2026": 118,
     "2025": 138,
     "2024": 85,
     "2023": 63,
@@ -14,15 +14,25 @@
   },
   "papers": [
     {
+      "key": "Reichert:2026mqi",
+      "source": "inspire",
+      "recid": 3200308,
+      "found_via": "arxiv",
+      "citation_count": 0,
+      "citation_count_excl_self": 0,
+      "counted_in_totals": true,
+      "citations_by_year": {}
+    },
+    {
       "key": "Reichert:2026ztj",
       "source": "inspire",
       "recid": 3164611,
       "found_via": "arxiv",
-      "citation_count": 1,
-      "citation_count_excl_self": 1,
+      "citation_count": 2,
+      "citation_count_excl_self": 2,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 1
+        "2026": 2
       }
     },
     {
@@ -30,11 +40,11 @@
       "source": "inspire",
       "recid": 3125288,
       "found_via": "arxiv",
-      "citation_count": 1,
-      "citation_count_excl_self": 0,
+      "citation_count": 2,
+      "citation_count_excl_self": 1,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 1
+        "2026": 2
       }
     },
     {
@@ -74,11 +84,11 @@
       "source": "inspire",
       "recid": 3093887,
       "found_via": "arxiv",
-      "citation_count": 21,
+      "citation_count": 20,
       "citation_count_excl_self": 11,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 19,
+        "2026": 18,
         "2025": 2
       }
     },
@@ -159,11 +169,12 @@
       "source": "inspire",
       "recid": 2915252,
       "found_via": "arxiv",
-      "citation_count": 5,
-      "citation_count_excl_self": 4,
+      "citation_count": 6,
+      "citation_count_excl_self": 5,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2025": 5
+        "2025": 5,
+        "2026": 1
       }
     },
     {
@@ -617,8 +628,8 @@
         "2022": 7,
         "2021": 4,
         "2026": 1,
-        "2025": 3,
         "2020": 2,
+        "2025": 3,
         "2024": 2,
         "2023": 1
       }
@@ -633,8 +644,8 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2021": 3,
-        "2022": 8,
         "2020": 2,
+        "2022": 8,
         "2023": 2,
         "2026": 1,
         "2025": 1
@@ -705,8 +716,8 @@
       "counted_in_totals": true,
       "citations_by_year": {
         "2021": 5,
-        "2020": 10,
         "2019": 2,
+        "2020": 10,
         "2022": 14,
         "2026": 3,
         "2024": 8,

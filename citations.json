@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-28T14:28:34+00:00",
-  "total_citations": 552,
-  "total_citations_excl_self_citations": 301,
+  "generated_at": "2026-10-06T09:49:25+00:00",
+  "total_citations": 557,
+  "total_citations_excl_self_citations": 303,
   "citations_by_year": {
-    "2026": 127,
+    "2026": 132,
     "2025": 137,
     "2024": 85,
     "2023": 63,
@@ -84,11 +84,11 @@
       "source": "inspire",
       "recid": 3093887,
       "found_via": "arxiv",
-      "citation_count": 21,
+      "citation_count": 24,
       "citation_count_excl_self": 11,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2026": 19,
+        "2026": 22,
         "2025": 2
       }
     },
@@ -221,12 +221,12 @@
       "source": "inspire",
       "recid": 2865805,
       "found_via": "arxiv",
-      "citation_count": 5,
-      "citation_count_excl_self": 2,
+      "citation_count": 6,
+      "citation_count_excl_self": 3,
       "counted_in_totals": true,
       "citations_by_year": {
-        "2025": 4,
-        "2026": 1
+        "2026": 2,
+        "2025": 4
       }
     },
     {
@@ -351,12 +351,12 @@
       "source": "inspire",
       "recid": 2778548,
       "found_via": "arxiv",
-      "citation_count": 5,
-      "citation_count_excl_self": 1,
+      "citation_count": 6,
+      "citation_count_excl_self": 2,
       "counted_in_totals": true,
       "citations_by_year": {
         "2024": 1,
-        "2026": 1,
+        "2026": 2,
         "2023": 1,
         "2025": 2
       }
@@ -557,8 +557,8 @@
         "2021": 1,
         "2022": 8,
         "2023": 6,
-        "2024": 3,
         "2026": 2,
+        "2024": 3,
         "2025": 1
       }
     },
@@ -628,8 +628,8 @@
         "2022": 7,
         "2021": 4,
         "2026": 1,
-        "2020": 2,
         "2025": 3,
+        "2020": 2,
         "2024": 2,
         "2023": 1
       }
@@ -736,8 +736,8 @@
       "citations_by_year": {
         "2019": 2,
         "2020": 3,
-        "2024": 4,
         "2022": 4,
+        "2024": 4,
         "2025": 6,
         "2026": 1
       }
